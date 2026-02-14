@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import heroImage from '/Assests/img/Jayci_Profile.jpeg'
-import { FaCode, FaFilm, FaJava, FaPython, FaReact, FaVideo } from 'react-icons/fa'
+import { FaCss3Alt, FaFilm, FaHtml5, FaJava, FaPython, FaReact, FaVideo, FaVuejs } from 'react-icons/fa'
 import { FaAws } from 'react-icons/fa6'
 import { SiCanva, SiDjango, SiFastapi, SiJavascript, SiMysql } from 'react-icons/si'
 
@@ -145,26 +145,29 @@ const expertiseSegments = [
   {
     title: 'Programming',
     items: [
-      { name: 'General Programming', Icon: FaCode, color: 'text-cyan-200' },
-      { name: 'Django', Icon: SiDjango, color: 'text-emerald-200' },
-      { name: 'React.js', Icon: FaReact, color: 'text-sky-200' },
-      { name: 'Python', Icon: FaPython, color: 'text-yellow-200' },
-      { name: 'Java', Icon: FaJava, color: 'text-orange-200' },
-      { name: 'JavaScript', Icon: SiJavascript, color: 'text-amber-200' },
-      { name: 'MySQL', Icon: SiMysql, color: 'text-blue-200' },
-      { name: 'FastAPI', Icon: SiFastapi, color: 'text-teal-200' },
-      { name: 'AWS Cloud Solutions Architect', Icon: FaAws, color: 'text-amber-200' },
+      { name: 'Django', Icon: SiDjango, color: 'text-emerald-200', section: 'Backend' },
+      { name: 'Python', Icon: FaPython, color: 'text-yellow-200', section: 'Backend' },
+      { name: 'Java', Icon: FaJava, color: 'text-orange-200', section: 'Backend' },
+      { name: 'FastAPI', Icon: SiFastapi, color: 'text-teal-200', section: 'Backend' },
+      { name: 'AWS Cloud Solutions Architect', Icon: FaAws, color: 'text-amber-200', section: 'Backend' },
+      { name: 'React.js', Icon: FaReact, color: 'text-sky-200', section: 'Frontend' },
+      { name: 'React', Icon: FaReact, color: 'text-cyan-200', section: 'Frontend' },
+      { name: 'Vue', Icon: FaVuejs, color: 'text-emerald-200', section: 'Frontend' },
+      { name: 'HTML', Icon: FaHtml5, color: 'text-orange-300', section: 'Frontend' },
+      { name: 'CSS', Icon: FaCss3Alt, color: 'text-blue-300', section: 'Frontend' },
+      { name: 'JavaScript', Icon: SiJavascript, color: 'text-amber-200', section: 'Frontend' },
+      { name: 'MySQL', Icon: SiMysql, color: 'text-blue-200', section: 'Database' },
     ],
   },
   {
     title: 'Visual',
-    items: [{ name: 'Canva', Icon: SiCanva, color: 'text-cyan-200' }],
+    items: [{ name: 'Canva', Icon: SiCanva, color: 'text-cyan-200', category: 'Tool' }],
   },
   {
     title: 'Video Editing',
     items: [
-      { name: 'CapCut', Icon: FaVideo, color: 'text-slate-200' },
-      { name: 'DaVinci Resolve', Icon: FaFilm, color: 'text-violet-200' },
+      { name: 'CapCut', Icon: FaVideo, color: 'text-slate-200', category: 'Tool' },
+      { name: 'DaVinci Resolve', Icon: FaFilm, color: 'text-violet-200', category: 'Tool' },
     ],
   },
 ]
@@ -227,17 +230,17 @@ function App() {
           <div className="space-y-6 animate-enter-up">
             <div className="flex flex-wrap gap-2">
               <p className="w-fit rounded-full border border-cyan-300/40 bg-cyan-300/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-200 sm:tracking-[0.25em]">
-                Computer Science 
+                Computer Science    
               </p>
               <p className="w-fit rounded-full border border-amber-300/40 bg-amber-300/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">
                 AWS Cloud Solutions Architect
               </p>
             </div>
             <h1 className="font-display text-3xl leading-tight text-white sm:text-5xl">
-              Web Developer & Technical Analyst
+             Full Stack Web Developer & Technical Analyst
             </h1>
             <p className="max-w-xl text-base leading-relaxed text-slate-300"> 
-              I am Jayci Gabriel Fernandez Acuna from Davao City, Philippines. Currently a Senior Computer Science student focused on growing as a developer by building practical projects and continuously strengthening my skills in technical analysis and problem-solving. 
+              I am Jayci Gabriel Fernandez Acuña from Davao City, Philippines. Currently a Senior Computer Science student focused on growing as a developer by building practical projects and continuously strengthening my skills in technical analysis and problem-solving. 
               I enjoy applying my analytical skills to understand problems, evaluate solutions, and develop user-focused applications through hands-on practice and continuous learning.
             </p>
             <div className="flex flex-wrap gap-4">
@@ -275,18 +278,41 @@ function App() {
               <article key={segment.title} className="rounded-2xl border border-white/10 bg-slate-900/70 p-5">
                 <h3 className="font-display text-xl text-white">{segment.title}</h3>
                 <div className="mt-4 space-y-3">
-                  {segment.items.map(({ name, Icon, color }) => (
-                    <div
-                      key={name}
-                      className="flex items-center gap-3 rounded-xl border border-white/10 bg-slate-950/50 p-3"
-                    >
-                      <Icon className={`text-2xl ${color}`} />
-                      <div>
-                        <p className="text-xs uppercase tracking-wide text-slate-400">Tool</p>
-                        <p className="font-semibold text-white">{name}</p>
-                      </div>
+                  {segment.title === 'Programming' ? (
+                    <div className="space-y-5">
+                      {['Frontend', 'Backend', 'Database'].map((group) => (
+                        <div key={group}>
+                          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200">{group}</p>
+                          <div className="space-y-3">
+                            {segment.items
+                              .filter((item) => item.section === group)
+                              .map(({ name, Icon, color }) => (
+                                <div
+                                  key={name}
+                                  className="flex items-center gap-3 rounded-xl border border-white/10 bg-slate-950/50 p-3"
+                                >
+                                  <Icon className={`text-2xl ${color}`} />
+                                  <p className="font-semibold text-white">{name}</p>
+                                </div>
+                              ))}
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  ) : (
+                    segment.items.map(({ name, Icon, color, category }) => (
+                      <div
+                        key={name}
+                        className="flex items-center gap-3 rounded-xl border border-white/10 bg-slate-950/50 p-3"
+                      >
+                        <Icon className={`text-2xl ${color}`} />
+                        <div>
+                          <p className="text-xs uppercase tracking-wide text-slate-400">{category || 'Tool'}</p>
+                          <p className="font-semibold text-white">{name}</p>
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
               </article>
             ))}
