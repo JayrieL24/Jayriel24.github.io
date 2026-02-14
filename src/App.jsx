@@ -9,10 +9,45 @@ const certificateFiles = import.meta.glob('../Assests/{certificates,Certificates
   import: 'default',
 })
 
-const videoFiles = import.meta.glob('../Assests/{videos,Videos}/*.{mp4,mov,webm,mkv}', {
-  eager: true,
-  import: 'default',
-})
+const externalVideos = [
+  {
+    title: 'LionFish_Trivia',
+    href: 'https://drive.google.com/file/d/1LT3efurxX4g1ZZanXhd4k3VegYREou4u/view',
+    poster: 'https://drive.google.com/thumbnail?id=1LT3efurxX4g1ZZanXhd4k3VegYREou4u&sz=w1200',
+    category: 'Trivia Edits',
+    external: true,
+  },
+  {
+    title: 'Ruka Sarashina Edit',
+    href: 'https://drive.google.com/file/d/1p5GtfX_zQvrOplUjeEdxlQnHBmM5Ht5k/view',
+    poster: 'https://drive.google.com/thumbnail?id=1p5GtfX_zQvrOplUjeEdxlQnHBmM5Ht5k&sz=w1200',
+    category: 'Anime Edits',
+    external: true,
+  },
+  {
+    title: 'Marin Kitagawa Edit',
+    href: 'https://drive.google.com/file/d/10vuEMYyQwSGDi5Ie3pSM2JcJzKi9MgZx/view',
+    poster: 'https://drive.google.com/thumbnail?id=10vuEMYyQwSGDi5Ie3pSM2JcJzKi9MgZx&sz=w1200',
+    category: 'Anime Edits',
+    external: true,
+  },
+  {
+    title: 'Chika Fujiwara (Sunflower)',
+    href: 'https://drive.google.com/file/d/1wm7e1GOMKeynhLBCMpwLzk5ZuX37Be6S/view',
+    poster: 'https://drive.google.com/thumbnail?id=1wm7e1GOMKeynhLBCMpwLzk5ZuX37Be6S&sz=w1200',
+    category: 'Anime Edits',
+    external: true,
+  },
+  {
+    title: 'Clip_Edit',
+    href: 'https://drive.google.com/file/d/1vo8gI2lhMYlqq8UGXSpQDzSOXl3KfDD7/view',
+    poster: 'https://drive.google.com/thumbnail?id=1vo8gI2lhMYlqq8UGXSpQDzSOXl3KfDD7&sz=w1200',
+    category: 'Clip Edits',
+    external: true,
+  },
+]
+
+const videoCategories = ['Trivia Edits', 'Anime Edits', 'Business Edits', 'Clip Edits']
 
 function formatFileLabel(path) {
   const filename = path.split('/').pop() || ''
@@ -27,6 +62,17 @@ function formatFileLabel(path) {
 function getFileKey(path) {
   const filename = path.split('/').pop() || ''
   return filename.replace(/\.[^/.]+$/, '').toLowerCase()
+}
+
+function getVideoCategory(title) {
+  const normalizedTitle = title.toLowerCase()
+
+  if (normalizedTitle.includes('trivia')) return 'Trivia Edits'
+  if (normalizedTitle.includes('anime')) return 'Anime Edits'
+  if (normalizedTitle.includes('business')) return 'Business Edits'
+  if (normalizedTitle.includes('tiktok') || normalizedTitle.includes('tik tok')) return 'Clip Edits'
+
+  return 'Trivia Edits'
 }
 
 const certificateMetaByFile = {
@@ -85,9 +131,14 @@ const certificates = Object.entries(certificateFiles)
 const featuredCertificates = certificates.filter((certificate) => certificate.featured)
 const regularCertificates = certificates.filter((certificate) => !certificate.featured)
 
-const videos = Object.entries(videoFiles).map(([path, href]) => ({
-  title: formatFileLabel(path),
-  href,
+const videos = externalVideos.map((video) => ({
+  ...video,
+  category: video.category || getVideoCategory(video.title),
+}))
+
+const videosByCategory = videoCategories.map((category) => ({
+  category,
+  items: videos.filter((video) => video.category === category),
 }))
 
 const expertiseSegments = [
@@ -120,51 +171,74 @@ const expertiseSegments = [
 
 function App() {
   const [selectedCertificate, setSelectedCertificate] = useState(null)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const navLinks = [
+    { href: '#top', label: 'Dashboard' },
+    { href: '#certificates-panel', label: 'Certificates' },
+    { href: '#projects-panel', label: 'Projects' },
+    { href: '#videos-panel', label: 'Video Edits' },
+    { href: '#about', label: 'About Me' },
+  ]
 
   return (
     <div id="top" className="min-h-screen bg-app text-slate-100">
       <header className="sticky top-0 z-30 border-b border-white/10 bg-slate-950/70 backdrop-blur">
-        <nav className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4">
-          <a className="text-lg font-bold tracking-wide text-slate-100" href="#home">
-            Jayci Acuna
-          </a>
-          <div className="flex gap-5 text-sm font-medium text-slate-300">
-            <a className="transition hover:text-cyan-300" href="#top">
-              Dashboard
+        <nav className="mx-auto w-full max-w-6xl px-4 py-4 sm:px-6">
+          <div className="flex items-center justify-between gap-3">
+            <a className="text-base font-bold tracking-wide text-slate-100 sm:text-lg" href="#home">
+              Jayci Gabriel F. Acuna
             </a>
-            <a className="transition hover:text-cyan-300" href="#certificates-panel">
-              Certificates
-            </a>
-            <a className="transition hover:text-cyan-300" href="#projects-panel">
-              Projects
-            </a>
-            <a className="transition hover:text-cyan-300" href="#videos-panel">
-              Video Edits
-            </a>
-            <a className="transition hover:text-cyan-300" href="#about">
-              About Me
-            </a>
+            <button
+              type="button"
+              className="rounded-lg border border-slate-600 px-3 py-2 text-xs font-semibold uppercase tracking-wide text-slate-200 transition hover:border-cyan-300 hover:text-cyan-200 md:hidden"
+              onClick={() => setMobileMenuOpen((open) => !open)}
+              aria-expanded={mobileMenuOpen}
+              aria-label="Toggle navigation menu"
+            >
+              Menu
+            </button>
+            <div className="hidden gap-5 text-sm font-medium text-slate-300 md:flex">
+              {navLinks.map((link) => (
+                <a key={link.href} className="transition hover:text-cyan-300" href={link.href}>
+                  {link.label}
+                </a>
+              ))}
+            </div>
           </div>
+          {mobileMenuOpen && (
+            <div className="mt-3 grid grid-cols-2 gap-2 border-t border-white/10 pt-3 md:hidden">
+              {navLinks.map((link) => (
+                <a
+                  key={`mobile-${link.href}`}
+                  className="rounded-lg border border-slate-700 px-3 py-2 text-center text-sm font-medium text-slate-200 transition hover:border-cyan-300 hover:text-cyan-200"
+                  href={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          )}
         </nav>
       </header>
 
-      <main className="mx-auto flex w-full max-w-6xl flex-col gap-24 px-6 pb-20 pt-14">
+      <main className="mx-auto flex w-full max-w-6xl flex-col gap-16 px-4 pb-20 pt-10 sm:gap-24 sm:px-6 sm:pt-14">
         <section className="grid items-center gap-10 md:grid-cols-[1.1fr_0.9fr]" id="home">
           <div className="space-y-6 animate-enter-up">
             <div className="flex flex-wrap gap-2">
-              <p className="w-fit rounded-full border border-cyan-300/40 bg-cyan-300/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-cyan-200">
-                Computer Science Student
+              <p className="w-fit rounded-full border border-cyan-300/40 bg-cyan-300/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-200 sm:tracking-[0.25em]">
+                Computer Science 
               </p>
               <p className="w-fit rounded-full border border-amber-300/40 bg-amber-300/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-amber-200">
                 AWS Cloud Solutions Architect
               </p>
             </div>
-            <h1 className="font-display text-4xl leading-tight text-white sm:text-5xl">
-              Building clean and creative web experiences.
+            <h1 className="font-display text-3xl leading-tight text-white sm:text-5xl">
+              Web Developer & Technical Analyst
             </h1>
-            <p className="max-w-xl text-base leading-relaxed text-slate-300">
-              I am Jayci Gabriel Fernandez Acuna from Davao City. I am focused on growing as a developer by building
-              practical projects and sharpening both design and frontend skills.
+            <p className="max-w-xl text-base leading-relaxed text-slate-300"> 
+              I am Jayci Gabriel Fernandez Acuna from Davao City, Philippines. Currently a Senior Computer Science student focused on growing as a developer by building practical projects and continuously strengthening my skills in technical analysis and problem-solving. 
+              I enjoy applying my analytical skills to understand problems, evaluate solutions, and develop user-focused applications through hands-on practice and continuous learning.
             </p>
             <div className="flex flex-wrap gap-4">
               <a
@@ -222,11 +296,11 @@ function App() {
         <section id="dashboard" className="space-y-8">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-200">Dashboard</p>
-            <h2 className="font-display text-3xl text-white">Certificates, Projects, and Videos</h2>
+            <h2 className="font-display text-3xl text-white">Projects, Videos, and Certificates</h2>
           </div>
 
-          <div className="space-y-5">
-            <article id="certificates-panel" className="rounded-2xl border border-white/10 bg-slate-900/70 p-6">
+          <div className="flex flex-col gap-5">
+            <article id="certificates-panel" className="order-3 rounded-2xl border border-white/10 bg-slate-900/70 p-6">
               <h3 className="font-display text-xl text-white">Certificates</h3>
               {certificates.length > 0 ? (
                 <div className="mt-4 space-y-4 text-sm text-slate-300">
@@ -289,7 +363,7 @@ function App() {
               )}
             </article>
 
-            <article id="projects-panel" className="scroll-mt-28 rounded-2xl border border-white/10 bg-slate-900/70 p-6">
+            <article id="projects-panel" className="order-1 scroll-mt-28 rounded-2xl border border-white/10 bg-slate-900/70 p-6">
               <h3 className="font-display text-xl text-white">Projects</h3>
               <ul className="mt-4 space-y-3 text-sm text-slate-300">
                 {projects.slice(0, 3).map((project) => (
@@ -301,19 +375,50 @@ function App() {
               </ul>
             </article>
 
-            <article id="videos-panel" className="rounded-2xl border border-white/10 bg-slate-900/70 p-6">
+            <article id="videos-panel" className="order-2 rounded-2xl border border-white/10 bg-slate-900/70 p-6">
               <h3 className="font-display text-xl text-white">Video Edits</h3>
               {videos.length > 0 ? (
-                <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  {videos.map((video) => (
-                    <li key={video.title} className="rounded-xl border border-white/10 bg-slate-950/50 p-4">
-                      <p className="mb-3 font-semibold text-cyan-200">{video.title}</p>
-                      <video className="w-full rounded-lg border border-white/10" controls preload="metadata">
-                        <source src={video.href} />
-                      </video>
-                    </li>
+                <div className="mt-4 space-y-6">
+                  {videosByCategory.map(({ category, items }) => (
+                    <section key={category} className="space-y-3">
+                      <h4 className="text-sm font-semibold uppercase tracking-[0.18em] text-cyan-200">{category}</h4>
+                      {items.length > 0 ? (
+                        <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                          {items.map((video) => (
+                            <li key={`${category}-${video.title}`} className="rounded-xl border border-white/10 bg-slate-950/50 p-4">
+                              <p className="mb-3 font-semibold text-cyan-200">{video.title}</p>
+                              {video.external ? (
+                                <div className="space-y-3">
+                                  <img
+                                    src={video.poster}
+                                    alt={`${video.title} thumbnail`}
+                                    className="w-full rounded-lg border border-white/10 object-cover"
+                                  />
+                                  <a
+                                    href={video.href}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="inline-flex rounded-lg border border-cyan-300/60 px-3 py-2 text-sm font-semibold text-cyan-200 transition hover:border-cyan-200 hover:text-cyan-100"
+                                  >
+                                    View
+                                  </a>
+                                </div>
+                              ) : (
+                                <video className="w-full rounded-lg border border-white/10" controls preload="metadata">
+                                  <source src={video.href} />
+                                </video>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="rounded-xl border border-dashed border-white/15 bg-slate-950/40 p-3 text-sm text-slate-400">
+                          No videos in this category yet.
+                        </p>
+                      )}
+                    </section>
                   ))}
-                </ul>
+                </div>
               ) : (
                 <p className="mt-4 rounded-xl border border-dashed border-white/15 bg-slate-950/40 p-4 text-sm text-slate-400">
                   Add files to <code>Assests/videos</code> and they will appear here automatically.
