@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import heroImage from '/Assests/img/Jayci_Profile.jpeg'
-import { FaCss3Alt, FaFacebook, FaFilm, FaGithub, FaGlobe, FaHome, FaHtml5, FaJava, FaPython, FaReact, FaVideo, FaVuejs, FaUser, FaBriefcase, FaCertificate, FaProjectDiagram, FaGraduationCap, FaBars } from 'react-icons/fa'
+import { FaCss3Alt, FaFacebook, FaFilm, FaGithub, FaGlobe, FaHome, FaHtml5, FaJava, FaPython, FaReact, FaVideo, FaVuejs, FaUser, FaBriefcase, FaCertificate, FaProjectDiagram, FaGraduationCap, FaBars, FaFileAlt } from 'react-icons/fa'
 import { FaAws } from 'react-icons/fa6'
 import { SiCanva, SiDjango, SiFastapi, SiJavascript, SiMysql } from 'react-icons/si'
 
@@ -343,6 +343,14 @@ function App() {
               >
                 View Projects
               </a>
+              <button
+                type="button"
+                onClick={() => setSelectedCertificate({ title: 'Resume - Jayci Gabriel Acuña', href: '/Assests/img/Resume_Thumbnail.png' })}
+                className="rounded-xl border border-slate-600 px-5 py-3 text-sm font-semibold text-slate-200 transition hover:border-cyan-300 hover:text-cyan-200"
+              > 
+                Resume 
+              (Outdated)
+              </button>
               <a
                 className="rounded-xl border border-slate-600 px-5 py-3 text-sm font-semibold text-slate-200 transition hover:border-cyan-300 hover:text-cyan-200"
                 href="#about"
