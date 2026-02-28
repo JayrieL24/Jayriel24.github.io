@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import heroImage from '/Assests/img/Jayci_Profile.jpeg'
+import heroImage from '/Assests/img/Icon_NavBar-removebg-preview.png'
 import { FaCss3Alt, FaFacebook, FaFilm, FaGithub, FaGlobe, FaHome, FaHtml5, FaJava, FaPython, FaReact, FaVideo, FaVuejs, FaUser, FaBriefcase, FaCertificate, FaProjectDiagram, FaGraduationCap, FaBars, FaFileAlt, FaEnvelope, FaLinkedin } from 'react-icons/fa'
 import { FaAws, FaXTwitter } from 'react-icons/fa6'
 import { SiCanva, SiDjango, SiFastapi, SiJavascript, SiMysql } from 'react-icons/si'
@@ -267,13 +267,75 @@ function App() {
       features: [
         'Role-Based Access Control (Admin, Handler, Student/Personnel)',
         'Equipment Management with barcode tracking',
-        'Borrow Workflow: Request → Approval → RFID & barcode scanning',
+        'Borrow Workflow: Request â†’ Approval â†’ RFID & barcode scanning',
         'AI-Powered Analytics for inventory insights',
         'Notification System with real-time updates'
       ],
       links: {
         github: 'https://github.com/JayrieL24/GearGuards',
         website: 'https://gearguards.netlify.app/login'
+      }
+    },
+    {
+      id: 'herocs',
+      name: 'HEROCS',
+      status: 'Completed (Deployment Pending)',
+      statusColor: 'amber',
+      thumbnail: '/Assests/img/Projects/HEROCS/HEROCS_Landing.jpeg',
+      images: [
+        { src: '/Assests/img/Projects/HEROCS/HEROCS_Landing.jpeg', title: 'Landing Page' },
+        { src: '/Assests/img/Projects/HEROCS/HEROCS_Landing2.jpeg', title: 'Landing Page - Alternate View' },
+        { src: '/Assests/img/Projects/HEROCS/HEROCS_sample.jpeg', title: 'System Preview 1' },
+        { src: '/Assests/img/Projects/HEROCS/HEROCS_sample2.jpeg', title: 'System Preview 2' },
+        { src: '/Assests/img/Projects/HEROCS/HEROCS_sample3.jpeg', title: 'System Preview 3' },
+        { src: '/Assests/img/Projects/HEROCS/HEROCS_sample4.jpeg', title: 'System Preview 4' },
+        { src: '/Assests/img/Projects/HEROCS/HEROCS_sample5.jpeg', title: 'System Preview 5' },
+      ],
+      shortDescription: 'On-device mobile computer vision system for household hazard detection and risk assessment.',
+      description: [
+        'HEROCS (Home Hazard Evaluation and Risk Object Classification System) is an on-device mobile computer vision system designed to detect and assess household hazards in Filipino home environments. The system focuses on risks affecting children aged 0â€“3 years by identifying hazardous objects in real time using a fine-tuned YOLOv8s model.',
+        'Unlike traditional binary safe/unsafe systems, HEROCS applies a multi-label classification framework that assigns multiple hazard attributes (e.g., sharp, toxic, within reach) to detected objects. These attributes are processed through a structured hazard scoring rubric to compute a Household Danger Index (HDI), providing an overall environmental risk assessment.',
+        'The system integrates Augmented Reality (AR) overlays to deliver color-coded bounding boxes, interactive hazard details, and preventive safety recommendations â€” all processed directly on-device without cloud dependency.',
+      ],
+      techStackSections: [
+        {
+          heading: 'Frontend',
+          items: ['Flutter (Mobile Framework)', 'Dart'],
+        },
+        {
+          heading: 'Computer Vision & AI',
+          items: ['YOLOv8s (Ultralytics)', 'TensorFlow Lite (On-device inference)', 'Multi-Label Classification Framework', 'Transfer Learning'],
+        },
+        {
+          heading: 'AR & Mobile Integration',
+          items: ['ARCore', 'Real-time Camera Processing', 'Interactive Bounding Box Rendering'],
+        },
+        {
+          heading: 'Model Training & Optimization',
+          items: ['Google Colab Pro (NVIDIA Tesla T4)', 'AdamW Optimizer', 'Early Stopping & Class Weighting', 'Custom Data Augmentation Pipeline'],
+        },
+        {
+          heading: 'Dataset',
+          items: [
+            '5,373 culturally contextualized Filipino household images',
+            '24 hazard classes with multi-label annotations',
+            'Risk-level categorization (Low, Moderate, High, Highly Dangerous)',
+          ],
+        },
+      ],
+      features: [
+        'Real-time hazard detection (28â€“32 FPS on mid-range Android devices)',
+        'Multi-label risk classification (not limited to safe/unsafe)',
+        'Household Danger Index (HDI) environmental scoring system',
+        'Color-coded AR hazard visualization',
+        'Interactive safety recommendations per detected object',
+        'On-device inference (no cloud processing required)',
+        'Culturally aware Filipino household hazard dataset',
+        'Context-aware risk scoring (categorical, positional, contextual attributes)',
+      ],
+      links: {
+        github: 'https://github.com/JayrieL24/HEROCS-Project',
+        website: null
       }
     }
   ]
@@ -356,6 +418,23 @@ function App() {
   }, [showNavWorksDropdown])
   
   const projectsList = projectsData.map(p => ({ id: p.id, name: p.name }))
+  const selectedProjectImages = selectedProject?.images || []
+  const selectedProjectImageIndex = selectedProjectImages.findIndex(
+    (image) => image.src === selectedProjectImage?.src
+  )
+  const canNavigateProjectImages = selectedProjectImageIndex !== -1 && selectedProjectImages.length > 1
+
+  const showPreviousProjectImage = () => {
+    if (!canNavigateProjectImages) return
+    const previousIndex = (selectedProjectImageIndex - 1 + selectedProjectImages.length) % selectedProjectImages.length
+    setSelectedProjectImage(selectedProjectImages[previousIndex])
+  }
+
+  const showNextProjectImage = () => {
+    if (!canNavigateProjectImages) return
+    const nextIndex = (selectedProjectImageIndex + 1) % selectedProjectImages.length
+    setSelectedProjectImage(selectedProjectImages[nextIndex])
+  }
   
   const scrollToProject = (projectId) => {
     const element = document.getElementById(projectId)
@@ -520,7 +599,7 @@ function App() {
             {/* Name and title with slide-in animation */}
             <div className="animate-enter-left" style={{ animationDelay: '0.2s' }}>
               <h1 className="font-display text-3xl leading-tight text-white sm:text-5xl transition-all duration-300 hover:text-cyan-300">
-                Jayci Gabriel Fernandez Acuña
+                Jayci Gabriel Fernandez AcuÃ±a
               </h1>
               <p className="mt-3 text-lg font-medium text-cyan-200 sm:text-xl animate-pulse-slow">
                 Full Stack Web Developer & Technical Analyst
@@ -529,7 +608,7 @@ function App() {
             
             {/* Description with fade-in animation */}
             <p className="max-w-xl text-base leading-relaxed text-slate-300 animate-fade-in" style={{ animationDelay: '0.4s' }}> 
-              I am Jayci Gabriel Fernandez Acuña from Davao City, Philippines. Currently a Senior Computer Science student focused on growing as a developer by building practical projects and continuously strengthening my skills in technical analysis and problem-solving. 
+              I am Jayci Gabriel Fernandez AcuÃ±a from Davao City, Philippines. Currently a Senior Computer Science student focused on growing as a developer by building practical projects and continuously strengthening my skills in technical analysis and problem-solving. 
               I enjoy applying my analytical skills to understand problems, evaluate solutions, and develop user-focused applications through hands-on practice and continuous learning.
             </p>
             
@@ -583,7 +662,7 @@ function App() {
               </a>
               <button
                 type="button"
-                onClick={() => setSelectedCertificate({ title: 'Resume - Jayci Gabriel Acuña', href: '/Assests/img/Resume_Thumbnail.png' })}
+                onClick={() => setSelectedCertificate({ title: 'Resume - Jayci Gabriel AcuÃ±a', href: '/Assests/img/Resume_Thumbnail.png' })}
                 className="rounded-xl border border-slate-600 px-5 py-3 text-sm font-semibold text-slate-200 transition-all duration-300 hover:border-cyan-300 hover:text-cyan-200 hover:shadow-lg hover:shadow-cyan-400/30 hover:-translate-y-1 active:translate-y-0"
               > 
                 Resume 
@@ -597,22 +676,17 @@ function App() {
               </a>
             </div>
           </div>
-          <div className="animate-enter-up-delay relative mx-auto w-full max-w-sm">
-            {/* Animated Glow Background */}
-            <div className="absolute -inset-4 -z-10 rounded-[2rem] bg-gradient-to-br from-cyan-400/30 to-emerald-300/20 blur-2xl animate-pulse-slow" />
-            
+          <div className="animate-enter-up-delay relative mx-auto w-full max-w-md">
             {/* Profile Image with Card Flip Effect and Continuous Animations */}
             <div className="group relative perspective-1000 animate-float-gentle">
-              <div className="relative aspect-square w-full rounded-[2rem] border border-white/20 shadow-2xl shadow-cyan-900/40 transition-all duration-700 preserve-3d group-hover:rotate-y-180 animate-glow-pulse">
+              <div className="relative aspect-[5/6] w-full rounded-[2rem] transition-all duration-700 preserve-3d group-hover:rotate-y-180">
                 {/* Front - Profile Image with Shimmer Effect */}
-                <div className="absolute inset-0 backface-hidden overflow-hidden rounded-[2rem]">
+                <div className="absolute inset-0 backface-hidden overflow-hidden rounded-[2rem] bg-transparent">
                   <img
-                    className="aspect-square w-full rounded-[2rem] object-cover animate-rotate-subtle"
+                    className="h-full w-full rounded-[2rem] object-contain object-center animate-rotate-subtle"
                     src={heroImage}
-                    alt="Jayci Gabriel Acuña"
+                    alt="Jayci Gabriel AcuÃ±a"
                   />
-                  {/* Shimmer Overlay */}
-                  <div className="absolute inset-0 animate-shimmer pointer-events-none"></div>
                 </div>
                 
                 {/* Back - Code Symbol */}
@@ -626,7 +700,7 @@ function App() {
                   </div>
                 </div>
               </div>
-              
+                
               {/* Hover Hint */}
               <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <p className="text-xs text-slate-400 whitespace-nowrap">Hover to flip</p>
@@ -716,14 +790,16 @@ function App() {
                 </div>
 
                 {/* LinkedIn */}
-                <button
-                  className="group flex h-12 w-12 items-center justify-center rounded-xl border border-slate-600 bg-slate-900/50 transition-all duration-300 hover:border-blue-500 hover:bg-blue-500/10 hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-1 hover:rotate-6 cursor-not-allowed opacity-60 animate-scale-in"
+                <a
+                  href="https://www.linkedin.com/in/jayci-gabriel-acu%C3%B1a-3281953b4"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group flex h-12 w-12 items-center justify-center rounded-xl border border-slate-600 bg-slate-900/50 transition-all duration-300 hover:border-blue-500 hover:bg-blue-500/10 hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-1 hover:rotate-6 animate-scale-in"
                   style={{ animationDelay: '1.4s' }}
-                  title="LinkedIn (Coming Soon)"
-                  disabled
+                  title="LinkedIn"
                 >
                   <FaLinkedin className="text-xl text-slate-300 transition-all duration-300 group-hover:text-blue-500 group-hover:scale-110" />
-                </button>
+                </a>
               </div>
             </div>
           </div>
@@ -739,18 +815,23 @@ function App() {
 
           {/* Project Cards Grid */}
           <div className="grid gap-6 md:grid-cols-2">
-            {projectsData.map((project) => (
+            {projectsData.map((project) => {
+              const frontendSummary = project.techStack?.frontend?.split(',')[0] || project.techStackSections?.find((section) => section.heading === 'Frontend')?.items?.[0] || 'Not specified'
+              const backendSummary = project.techStack?.backend?.split(',')[0] || project.techStackSections?.find((section) => section.heading === 'Computer Vision & AI')?.items?.[0] || 'Not specified'
+              const databaseSummary = project.techStack?.database || project.techStackSections?.find((section) => section.heading === 'Dataset')?.items?.[0] || 'Not specified'
+
+              return (
               <button
                 key={project.id}
                 onClick={() => setSelectedProject(project)}
                 className="group relative rounded-2xl border border-white/10 bg-gradient-to-br from-slate-900/70 to-slate-950/50 p-0 overflow-hidden text-left transition-all duration-300 hover:border-cyan-300/60 hover:shadow-xl hover:shadow-cyan-400/20 hover:-translate-y-1"
               >
                 {/* Thumbnail */}
-                <div className="relative h-48 overflow-hidden">
+                <div className="relative h-52 overflow-hidden bg-slate-950/80">
                   <img 
                     src={project.thumbnail} 
                     alt={project.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="w-full h-full object-contain object-center p-2 transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent"></div>
                   
@@ -778,15 +859,15 @@ function App() {
                   <div className="space-y-2 mb-4">
                     <div className="flex items-center gap-2">
                       <span className="text-xs font-semibold text-cyan-300">Frontend:</span>
-                      <span className="text-xs text-slate-400 line-clamp-1">{project.techStack.frontend.split(',')[0]}</span>
+                      <span className="text-xs text-slate-400 line-clamp-1">{frontendSummary}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-xs font-semibold text-emerald-300">Backend:</span>
-                      <span className="text-xs text-slate-400 line-clamp-1">{project.techStack.backend.split(',')[0]}</span>
+                      <span className="text-xs text-slate-400 line-clamp-1">{backendSummary}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-xs font-semibold text-blue-300">Database:</span>
-                      <span className="text-xs text-slate-400">{project.techStack.database}</span>
+                      <span className="text-xs text-slate-400">{databaseSummary}</span>
                     </div>
                   </div>
 
@@ -799,7 +880,8 @@ function App() {
                   </div>
                 </div>
               </button>
-            ))}
+              )
+            })}
           </div>
         </section>
 
@@ -1277,16 +1359,11 @@ function App() {
         </section>
 
         <section className="grid gap-8 rounded-3xl border border-white/10 bg-slate-900/60 p-6 sm:p-10 md:grid-cols-[0.9fr_1.1fr] scroll-animate hover-glow transition-all duration-300" id="about">
-          <div className="mx-auto grid w-full max-w-md gap-4 sm:grid-cols-2 md:grid-cols-1">
+          <div className="mx-auto w-full max-w-md">
             <img
-              src="/Assests/img/Jayci_Featured1.jpeg?v=2026-02-14-2200"
-              alt="Jayci featured portrait 1"
-              className="h-full min-h-[240px] w-full rounded-2xl border border-white/20 object-cover object-top transition-transform duration-500 hover:scale-105 hover:rotate-2"
-            />
-            <img
-              src="/Assests/img/Jayci_Featured2.jpg?v=2026-02-14-2200"
-              alt="Jayci featured portrait 2"
-              className="h-full min-h-[240px] w-full rounded-2xl border border-white/20 object-cover object-top transition-transform duration-500 hover:scale-105 hover:-rotate-2"
+              src="/Assests/img/Jayci's Profile.jpeg"
+              alt="Jayci profile portrait"
+              className="h-full min-h-[420px] w-full rounded-2xl border border-white/20 object-cover object-top animate-float-gentle transition-transform duration-500 hover:scale-105"
             />
           </div>
           <div className="space-y-5">
@@ -1390,13 +1467,15 @@ function App() {
                 </div>
 
                 {/* LinkedIn */}
-                <button
-                  className="group flex h-12 w-12 items-center justify-center rounded-xl border border-slate-600 bg-slate-900/50 transition-all duration-300 hover:border-blue-500 hover:bg-blue-500/10 hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-1 cursor-not-allowed opacity-60"
-                  title="LinkedIn (Coming Soon)"
-                  disabled
+                <a
+                  href="https://www.linkedin.com/in/jayci-gabriel-acu%C3%B1a-3281953b4"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group flex h-12 w-12 items-center justify-center rounded-xl border border-slate-600 bg-slate-900/50 transition-all duration-300 hover:border-blue-500 hover:bg-blue-500/10 hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-1"
+                  title="LinkedIn"
                 >
                   <FaLinkedin className="text-xl text-slate-300 transition-colors group-hover:text-blue-500" />
-                </button>
+                </a>
               </div>
             </div>
           </div>
@@ -1641,7 +1720,7 @@ function App() {
                           <div>
                             <span className="inline-block rounded-full bg-violet-400/20 px-3 py-1 text-xs font-bold uppercase tracking-wider text-violet-200 mb-2">Primary</span>
                             <h4 className="font-display text-xl text-white mb-1">Elementary Education</h4>
-                            <p className="text-base font-semibold text-violet-200">Doña Pilar Learning Center Foundation Inc.</p>
+                            <p className="text-base font-semibold text-violet-200">DoÃ±a Pilar Learning Center Foundation Inc.</p>
                           </div>
                           <span className="rounded-lg bg-violet-400/20 px-3 py-1.5 text-sm font-bold text-violet-200 border border-violet-400/30">2010 - 2016</span>
                         </div>
@@ -1714,7 +1793,7 @@ function App() {
                               </span>
                             </div>
                             <h4 className="font-display text-xl text-white mb-1">Southern Philippines Medical Center (SPMC)</h4>
-                            <p className="text-sm text-slate-400 mb-2">📍 JP Laurel Avenue, Bajada, Davao City, 8000, Philippines</p>
+                            <p className="text-sm text-slate-400 mb-2">ðŸ“ JP Laurel Avenue, Bajada, Davao City, 8000, Philippines</p>
                             <p className="text-sm text-cyan-200 font-semibold mb-3">Project: Referral System for Emergency Dispatch Communication Center (EDCC)</p>
                             <p className="text-sm text-slate-300 leading-relaxed">Developing a comprehensive hospital referral management system for incoming referrals across neighboring hospitals around the Philippines.</p>
                           </div>
@@ -1735,7 +1814,7 @@ function App() {
                           />
                           <div className="absolute inset-0 flex items-center justify-center bg-slate-950/60 opacity-0 transition-opacity duration-300 group-hover/thumb:opacity-100">
                             <span className="rounded-lg bg-cyan-400 px-4 py-2 text-sm font-semibold text-slate-950 shadow-lg">
-                              🖼️ View Project
+                              ðŸ–¼ï¸ View Project
                             </span>
                           </div>
                         </button>
@@ -1763,7 +1842,7 @@ function App() {
                             <p className="text-sm text-violet-200 font-semibold mb-2">Group Thesis Project</p>
                             <p className="text-sm text-slate-300 leading-relaxed mb-3"> An on-device mobile computer vision system designed to enhance household safety by detecting and assessing hazards, particularly for toddlers aged 0-3 in Filipino homes.</p>
                             <p className="text-sm text-slate-400">
-                              <span className="font-semibold text-slate-300">📄 Publication:</span> 9th International Conference on Information and Computer Technologies (ICICT 2026)
+                              <span className="font-semibold text-slate-300">ðŸ“„ Publication:</span> 9th International Conference on Information and Computer Technologies (ICICT 2026)
                             </p>
                           </div>
                           <span className="rounded-lg bg-violet-400/20 px-3 py-1.5 text-sm font-bold text-violet-200 border border-violet-400/30">2025 - 2026</span>
@@ -1783,7 +1862,7 @@ function App() {
                           />
                           <div className="absolute inset-0 flex items-center justify-center bg-slate-950/60 opacity-0 transition-opacity duration-300 group-hover/thumb:opacity-100">
                             <span className="rounded-lg bg-violet-400 px-4 py-2 text-sm font-semibold text-slate-950 shadow-lg">
-                              📄 View PDF
+                              ðŸ“„ View PDF
                             </span>
                           </div>
                         </button>
@@ -1896,12 +1975,12 @@ function App() {
                   <button
                     key={idx}
                     onClick={() => setSelectedProjectImage(image)}
-                    className="group relative aspect-video rounded-xl overflow-hidden border border-white/10 hover:border-cyan-300/60 transition-all duration-300"
+                    className="group relative h-52 rounded-xl overflow-hidden border border-white/10 bg-slate-950/80 hover:border-cyan-300/60 transition-all duration-300"
                   >
                     <img 
                       src={image.src} 
                       alt={image.title}
-                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                      className="w-full h-full object-contain object-center p-2 transition-transform duration-300 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-slate-950/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                       <span className="text-sm font-semibold text-white">{image.title}</span>
@@ -1914,43 +1993,68 @@ function App() {
             {/* Project Details */}
             <div className="space-y-6">
               {/* Description */}
-              <div>
-                <h4 className="text-sm font-semibold uppercase tracking-wide text-cyan-200 mb-2">Description</h4>
-                <p className="text-sm text-slate-300 leading-relaxed">{selectedProject.description}</p>
-              </div>
+              <section>
+                <h4 className="text-sm font-semibold uppercase tracking-wide text-cyan-200 mb-2">DESCRIPTION</h4>
+                {Array.isArray(selectedProject.description) ? (
+                  <div className="space-y-3">
+                    {selectedProject.description.map((paragraph, idx) => (
+                      <p key={idx} className="text-sm text-slate-300 leading-relaxed">{paragraph}</p>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-slate-300 leading-relaxed">{selectedProject.description}</p>
+                )}
+              </section>
 
               {/* Tech Stack */}
-              <div>
-                <h4 className="text-sm font-semibold uppercase tracking-wide text-cyan-200 mb-3">Tech Stack</h4>
-                <div className="space-y-3">
-                  <div>
-                    <p className="text-xs font-semibold text-cyan-300 mb-2">Frontend</p>
-                    <p className="text-sm text-slate-400">{selectedProject.techStack.frontend}</p>
+              <section>
+                <h4 className="text-sm font-semibold uppercase tracking-wide text-cyan-200 mb-3">TECH STACK</h4>
+                {Array.isArray(selectedProject.techStackSections) ? (
+                  <div className="space-y-4">
+                    {selectedProject.techStackSections.map((section, idx) => (
+                      <div key={idx}>
+                        <p className="text-xs font-semibold text-cyan-300 mb-2">{section.heading}</p>
+                        <ul className="space-y-1.5">
+                          {section.items.map((item, itemIdx) => (
+                            <li key={itemIdx} className="flex gap-2 text-sm text-slate-300">
+                              <span className="text-cyan-300 mt-1">â€¢</span>
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
                   </div>
-                  <div>
-                    <p className="text-xs font-semibold text-emerald-300 mb-2">Backend</p>
-                    <p className="text-sm text-slate-400">{selectedProject.techStack.backend}</p>
+                ) : (
+                  <div className="space-y-3">
+                    <div>
+                      <p className="text-xs font-semibold text-cyan-300 mb-2">Frontend</p>
+                      <p className="text-sm text-slate-400">{selectedProject.techStack.frontend}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold text-emerald-300 mb-2">Backend</p>
+                      <p className="text-sm text-slate-400">{selectedProject.techStack.backend}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold text-blue-300 mb-2">Database</p>
+                      <p className="text-sm text-slate-400">{selectedProject.techStack.database}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-xs font-semibold text-blue-300 mb-2">Database</p>
-                    <p className="text-sm text-slate-400">{selectedProject.techStack.database}</p>
-                  </div>
-                </div>
-              </div>
+                )}
+              </section>
 
               {/* Key Features */}
-              <div>
-                <h4 className="text-sm font-semibold uppercase tracking-wide text-cyan-200 mb-3">Key Features</h4>
+              <section>
+                <h4 className="text-sm font-semibold uppercase tracking-wide text-cyan-200 mb-3">KEY FEATURES</h4>
                 <ul className="space-y-2">
                   {selectedProject.features.map((feature, idx) => (
                     <li key={idx} className="flex gap-2 text-sm text-slate-300">
-                      <span className="text-cyan-300 mt-1">▸</span>
+                      <span className="text-cyan-300 mt-1">â€¢</span>
                       <span>{feature}</span>
                     </li>
                   ))}
                 </ul>
-              </div>
-
+              </section>
               {/* Links */}
               <div className="flex flex-wrap gap-3 pt-4 border-t border-white/10">
                 {selectedProject.links.github && (
@@ -1994,11 +2098,33 @@ function App() {
             </button>
             <div className="rounded-2xl border border-white/15 bg-slate-900 p-4 animate-scale-in">
               <h4 className="text-lg font-semibold text-white mb-3">{selectedProjectImage.title}</h4>
-              <img 
-                src={selectedProjectImage.src} 
-                alt={selectedProjectImage.title}
-                className="w-full rounded-xl border border-white/10"
-              />
+              <div className="relative">
+                {canNavigateProjectImages && (
+                  <button
+                    type="button"
+                    onClick={showPreviousProjectImage}
+                    className="absolute left-3 top-1/2 z-10 -translate-y-1/2 rounded-lg border border-white/20 bg-slate-900/80 px-3 py-2 text-lg font-semibold text-white hover:border-cyan-300 hover:text-cyan-200"
+                    aria-label="Previous image"
+                  >
+                    {'<'}
+                  </button>
+                )}
+                <img
+                  src={selectedProjectImage.src}
+                  alt={selectedProjectImage.title}
+                  className="mx-auto max-h-[75vh] w-auto max-w-full rounded-xl border border-white/10 object-contain"
+                />
+                {canNavigateProjectImages && (
+                  <button
+                    type="button"
+                    onClick={showNextProjectImage}
+                    className="absolute right-3 top-1/2 z-10 -translate-y-1/2 rounded-lg border border-white/20 bg-slate-900/80 px-3 py-2 text-lg font-semibold text-white hover:border-cyan-300 hover:text-cyan-200"
+                    aria-label="Next image"
+                  >
+                    {'>'}
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -2008,3 +2134,4 @@ function App() {
 }
 
 export default App
+
