@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import heroImage from '/Assests/img/Icon_NavBar-removebg-preview.png'
 import { FaCss3Alt, FaFacebook, FaFilm, FaGithub, FaGlobe, FaHome, FaHtml5, FaJava, FaPython, FaReact, FaVideo, FaVuejs, FaUser, FaBriefcase, FaCertificate, FaProjectDiagram, FaGraduationCap, FaBars, FaFileAlt, FaEnvelope, FaLinkedin } from 'react-icons/fa'
 import { FaAws, FaXTwitter } from 'react-icons/fa6'
-import { SiCanva, SiDjango, SiFastapi, SiJavascript, SiMysql } from 'react-icons/si'
+import { SiCanva, SiDjango, SiFastapi, SiJavascript, SiMysql, SiN8N } from 'react-icons/si'
 
 const certificateFiles = import.meta.glob('../Assests/{certificates,Certificates}/*.{pdf,png,jpg,jpeg,webp}', {
   eager: true,
@@ -184,6 +184,10 @@ const expertiseSegments = [
     items: [{ name: 'Canva', Icon: SiCanva, color: 'text-cyan-200', category: 'Tool' }],
   },
   {
+    title: 'AI Automation Tools',
+    items: [{ name: 'n8n', Icon: SiN8N, color: 'text-orange-200', category: 'Tool' }],
+  },
+  {
     title: 'Video Editing',
     items: [
       { name: 'CapCut', Icon: FaVideo, color: 'text-slate-200', category: 'Tool' },
@@ -214,6 +218,7 @@ function App() {
   const projectsData = [
     {
       id: 'spmc-referral',
+      projectType: 'system',
       name: 'SPMC Referral System',
       status: 'Under Development',
       statusColor: 'amber',
@@ -246,6 +251,7 @@ function App() {
     },
     {
       id: 'gearguards',
+      projectType: 'system',
       name: 'GearGuards',
       status: 'Deployed',
       statusColor: 'emerald',
@@ -278,6 +284,7 @@ function App() {
     },
     {
       id: 'herocs',
+      projectType: 'system',
       name: 'HEROCS',
       status: 'Completed (Deployment Pending)',
       statusColor: 'amber',
@@ -293,9 +300,9 @@ function App() {
       ],
       shortDescription: 'On-device mobile computer vision system for household hazard detection and risk assessment.',
       description: [
-        'HEROCS (Home Hazard Evaluation and Risk Object Classification System) is an on-device mobile computer vision system designed to detect and assess household hazards in Filipino home environments. The system focuses on risks affecting children aged 0â€“3 years by identifying hazardous objects in real time using a fine-tuned YOLOv8s model.',
+        'HEROCS (Home Hazard Evaluation and Risk Object Classification System) is an on-device mobile computer vision system designed to detect and assess household hazards in Filipino home environments. The system focuses on risks affecting children aged 0-3 years by identifying hazardous objects in real time using a fine-tuned YOLOv8s model.',
         'Unlike traditional binary safe/unsafe systems, HEROCS applies a multi-label classification framework that assigns multiple hazard attributes (e.g., sharp, toxic, within reach) to detected objects. These attributes are processed through a structured hazard scoring rubric to compute a Household Danger Index (HDI), providing an overall environmental risk assessment.',
-        'The system integrates Augmented Reality (AR) overlays to deliver color-coded bounding boxes, interactive hazard details, and preventive safety recommendations â€” all processed directly on-device without cloud dependency.',
+        'The system integrates Augmented Reality (AR) overlays to deliver color-coded bounding boxes, interactive hazard details, and preventive safety recommendations - all processed directly on-device without cloud dependency.',
       ],
       techStackSections: [
         {
@@ -324,7 +331,7 @@ function App() {
         },
       ],
       features: [
-        'Real-time hazard detection (28â€“32 FPS on mid-range Android devices)',
+        'Real-time hazard detection (28-32 FPS on mid-range Android devices)',
         'Multi-label risk classification (not limited to safe/unsafe)',
         'Household Danger Index (HDI) environmental scoring system',
         'Color-coded AR hazard visualization',
@@ -335,6 +342,100 @@ function App() {
       ],
       links: {
         github: 'https://github.com/JayrieL24/HEROCS-Project',
+        website: null
+      }
+    },
+    {
+      id: 'ai-transcribing-automation',
+      projectType: 'automation',
+      name: 'AI Transcribing Automation',
+      status: 'Completed',
+      statusColor: 'emerald',
+      hideStatusBadge: true,
+      thumbnail: '/Assests/img/Projects/Ai_Transcribing_Automation/Automation_Sample.png',
+      images: [
+        { src: '/Assests/img/Projects/Ai_Transcribing_Automation/Automation_Sample.png', title: 'Workflow Preview' },
+      ],
+      shortDescription: 'Automates long audio transcription into structured Google Docs meeting notes.',
+      disclaimer:
+        'Note: The original concept required a paid subscription I currently cannot afford, so I implemented a local API to handle audio splitting and transcription instead.',
+      techStack: {
+        frontend: 'n8n Cloud, Google Drive API, Google Docs API',
+        backend: 'Python FastAPI, ffmpeg, faster-whisper + CTranslate2, Cloudflare Tunnel, NVIDIA CUDA Toolkit 12.x',
+        database: 'Windows + NVIDIA GTX 1650 Ti (Local Runtime)'
+      },
+      contentSections: [
+        {
+          title: '1. 🚀 Project Overview',
+          type: 'paragraph',
+          content:
+            'This automation turns long audio recordings into clean, structured meeting notes. It solves the problem of manual transcription by automatically converting audio into organized documentation.'
+        },
+        {
+          title: '2. 🧠 How It Works (Step-by-Step Flow)',
+          type: 'list',
+          items: [
+            'Audio file uploaded to Google Drive',
+            'File made publicly accessible',
+            'n8n sends file ID to my local server',
+            'Local Python FastAPI server downloads the file',
+            'ffmpeg optimizes and splits large audio files',
+            'GPU-accelerated Whisper (faster-whisper + CUDA) transcribes the audio',
+            'Transcript is returned to n8n',
+            'AI node cleans and structures the transcript',
+            'Google Docs automatically created with formatted notes'
+          ]
+        },
+        {
+          title: '3. ⚙️ Tech Stack',
+          type: 'list',
+          items: [
+            'n8n Cloud: workflow automation platform that connects each step.',
+            'Python FastAPI: local API server that receives file IDs and handles processing.',
+            'ffmpeg: processes audio and splits large files into manageable parts.',
+            'faster-whisper + CTranslate2: fast local transcription engine.',
+            'NVIDIA CUDA Toolkit 12.x: enables GPU acceleration for faster processing.',
+            'Cloudflare Tunnel: secure public access path to the local server.',
+            'Google Drive API: handles audio file storage and retrieval.',
+            'Google Docs API: generates the final formatted notes document.',
+            'Windows + NVIDIA GTX 1650 Ti: local environment running the inference pipeline.'
+          ]
+        },
+        {
+          title: '4. 🔥 Key Technical Highlights',
+          type: 'list',
+          items: [
+            'Large file handling (350MB+ / 1.5 hour audio)',
+            'Automatic chunk splitting under 25MB',
+            'GPU acceleration for faster transcription',
+            'Zero OpenAI API cost (fully local inference)',
+            'Stable named tunnel option vs temporary tunnel'
+          ]
+        },
+        {
+          title: '5. ⚠️ Challenges & Lessons Learned',
+          type: 'list',
+          items: [
+            'I resolved CUDA setup issues, including missing DLL errors such as cublas64_12.dll.',
+            'I made sure ffmpeg was installed and accessible system-wide.',
+            'I adjusted Google Drive file-sharing so automation could access files securely.',
+            'I set up Cloudflare Tunnel as a secure bridge between my local machine and n8n Cloud.',
+            'I learned that quick tunnels can disconnect, while named tunnels are better for stable long-running workflows.'
+          ]
+        },
+        {
+          title: '6. 🎯 Why This Project Matters',
+          type: 'list',
+          items: [
+            'Automates long-form meeting documentation',
+            'Saves hours of manual transcription work',
+            'Uses local GPU instead of paid APIs',
+            'Shows full-stack AI automation capability'
+          ]
+        }
+      ],
+      links: {
+        github: 'https://github.com/JayrieL24/Automation_Transcriber',
         website: null
       }
     }
@@ -418,6 +519,8 @@ function App() {
   }, [showNavWorksDropdown])
   
   const projectsList = projectsData.map(p => ({ id: p.id, name: p.name }))
+  const systemProjects = projectsData.filter((project) => project.projectType === 'system')
+  const automationProjects = projectsData.filter((project) => project.projectType === 'automation')
   const selectedProjectImages = selectedProject?.images || []
   const selectedProjectImageIndex = selectedProjectImages.findIndex(
     (image) => image.src === selectedProjectImage?.src
@@ -434,6 +537,84 @@ function App() {
     if (!canNavigateProjectImages) return
     const nextIndex = (selectedProjectImageIndex + 1) % selectedProjectImages.length
     setSelectedProjectImage(selectedProjectImages[nextIndex])
+  }
+
+  const renderProjectCard = (project) => {
+    const frontendSummary =
+      project.techStack?.frontend?.split(',')[0] ||
+      project.techStackSections?.find((section) => section.heading === 'Frontend')?.items?.[0] ||
+      'Not specified'
+    const backendSummary =
+      project.techStack?.backend?.split(',')[0] ||
+      project.techStackSections?.find((section) => section.heading === 'Computer Vision & AI')?.items?.[0] ||
+      'Not specified'
+    const databaseSummary =
+      project.techStack?.database ||
+      project.techStackSections?.find((section) => section.heading === 'Dataset')?.items?.[0] ||
+      'Not specified'
+
+    return (
+      <button
+        key={project.id}
+        onClick={() => setSelectedProject(project)}
+        className="group relative rounded-2xl border border-white/10 bg-gradient-to-br from-slate-900/70 to-slate-950/50 p-0 overflow-hidden text-left transition-all duration-300 hover:border-cyan-300/60 hover:shadow-xl hover:shadow-cyan-400/20 hover:-translate-y-1"
+      >
+        <div className="relative h-52 overflow-hidden bg-slate-950/80">
+          <img
+            src={project.thumbnail}
+            alt={project.name}
+            className="w-full h-full object-contain object-center p-2 transition-transform duration-500 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent"></div>
+
+          {!project.hideStatusBadge && (
+            <div className="absolute top-4 right-4">
+              <span
+                className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold uppercase tracking-wide backdrop-blur-md shadow-lg ${
+                  project.statusColor === 'emerald'
+                    ? 'border-emerald-400/80 bg-emerald-500/90 text-white shadow-emerald-500/50'
+                    : 'border-amber-400/80 bg-amber-500/90 text-slate-900 shadow-amber-500/50'
+                }`}
+              >
+                <span
+                  className={`h-2 w-2 rounded-full ${
+                    project.statusColor === 'emerald' ? 'bg-white animate-pulse' : 'bg-slate-900'
+                  }`}
+                ></span>
+                {project.status}
+              </span>
+            </div>
+          )}
+        </div>
+
+        <div className="p-5">
+          <h4 className="font-display text-xl text-white mb-2 group-hover:text-cyan-300 transition-colors">{project.name}</h4>
+          <p className="text-sm text-slate-400 mb-4 line-clamp-2">{project.shortDescription}</p>
+
+          <div className="space-y-2 mb-4">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-semibold text-cyan-300">Frontend:</span>
+              <span className="text-xs text-slate-400 line-clamp-1">{frontendSummary}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-semibold text-emerald-300">Backend:</span>
+              <span className="text-xs text-slate-400 line-clamp-1">{backendSummary}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-semibold text-blue-300">Database:</span>
+              <span className="text-xs text-slate-400">{databaseSummary}</span>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between pt-3 border-t border-white/10">
+            <span className="text-sm font-semibold text-cyan-300 group-hover:text-cyan-200 transition-colors">View Details</span>
+            <svg className="h-5 w-5 text-cyan-300 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+        </div>
+      </button>
+    )
   }
   
   const scrollToProject = (projectId) => {
@@ -599,7 +780,7 @@ function App() {
             {/* Name and title with slide-in animation */}
             <div className="animate-enter-left" style={{ animationDelay: '0.2s' }}>
               <h1 className="font-display text-3xl leading-tight text-white sm:text-5xl transition-all duration-300 hover:text-cyan-300">
-                Jayci Gabriel Fernandez AcuÃ±a
+                Jayci Gabriel Fernandez Acuña
               </h1>
               <p className="mt-3 text-lg font-medium text-cyan-200 sm:text-xl animate-pulse-slow">
                 Full Stack Web Developer & Technical Analyst
@@ -608,7 +789,7 @@ function App() {
             
             {/* Description with fade-in animation */}
             <p className="max-w-xl text-base leading-relaxed text-slate-300 animate-fade-in" style={{ animationDelay: '0.4s' }}> 
-              I am Jayci Gabriel Fernandez AcuÃ±a from Davao City, Philippines. Currently a Senior Computer Science student focused on growing as a developer by building practical projects and continuously strengthening my skills in technical analysis and problem-solving. 
+              I am Jayci Gabriel Fernandez Acuña from Davao City, Philippines. Currently a Senior Computer Science student focused on growing as a developer by building practical projects and continuously strengthening my skills in technical analysis and problem-solving. 
               I enjoy applying my analytical skills to understand problems, evaluate solutions, and develop user-focused applications through hands-on practice and continuous learning.
             </p>
             
@@ -662,7 +843,7 @@ function App() {
               </a>
               <button
                 type="button"
-                onClick={() => setSelectedCertificate({ title: 'Resume - Jayci Gabriel AcuÃ±a', href: '/Assests/img/Resume_Thumbnail.png' })}
+                onClick={() => setSelectedCertificate({ title: 'Resume - Jayci Gabriel Acuña', href: '/Assests/img/Resume_Thumbnail.png' })}
                 className="rounded-xl border border-slate-600 px-5 py-3 text-sm font-semibold text-slate-200 transition-all duration-300 hover:border-cyan-300 hover:text-cyan-200 hover:shadow-lg hover:shadow-cyan-400/30 hover:-translate-y-1 active:translate-y-0"
               > 
                 Resume 
@@ -685,7 +866,7 @@ function App() {
                   <img
                     className="h-full w-full rounded-[2rem] object-contain object-center animate-rotate-subtle"
                     src={heroImage}
-                    alt="Jayci Gabriel AcuÃ±a"
+                    alt="Jayci Gabriel Acuña"
                   />
                 </div>
                 
@@ -696,7 +877,7 @@ function App() {
                       &lt;/&gt;
                     </div>
                     <p className="text-xl font-semibold text-white">Full Stack Developer</p>
-                    <p className="mt-2 text-sm text-cyan-200">Building the future, one line at a time</p>
+                    <p className="mt-2 text-sm text-cyan-200">Powered by Passion, dev with Precision </p>
                   </div>
                 </div>
               </div>
@@ -813,76 +994,22 @@ function App() {
             <p className="mt-2 text-sm text-slate-400">Click on a project to view details and screenshots</p>
           </div>
 
-          {/* Project Cards Grid */}
-          <div className="grid gap-6 md:grid-cols-2">
-            {projectsData.map((project) => {
-              const frontendSummary = project.techStack?.frontend?.split(',')[0] || project.techStackSections?.find((section) => section.heading === 'Frontend')?.items?.[0] || 'Not specified'
-              const backendSummary = project.techStack?.backend?.split(',')[0] || project.techStackSections?.find((section) => section.heading === 'Computer Vision & AI')?.items?.[0] || 'Not specified'
-              const databaseSummary = project.techStack?.database || project.techStackSections?.find((section) => section.heading === 'Dataset')?.items?.[0] || 'Not specified'
+          <div className="space-y-8">
+            <div className="space-y-4">
+              <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-300">System Projects</h3>
+              <div className="grid gap-6 md:grid-cols-2">
+                {systemProjects.map(renderProjectCard)}
+              </div>
+            </div>
 
-              return (
-              <button
-                key={project.id}
-                onClick={() => setSelectedProject(project)}
-                className="group relative rounded-2xl border border-white/10 bg-gradient-to-br from-slate-900/70 to-slate-950/50 p-0 overflow-hidden text-left transition-all duration-300 hover:border-cyan-300/60 hover:shadow-xl hover:shadow-cyan-400/20 hover:-translate-y-1"
-              >
-                {/* Thumbnail */}
-                <div className="relative h-52 overflow-hidden bg-slate-950/80">
-                  <img 
-                    src={project.thumbnail} 
-                    alt={project.name}
-                    className="w-full h-full object-contain object-center p-2 transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent"></div>
-                  
-                  {/* Status Badge */}
-                  <div className="absolute top-4 right-4">
-                    <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold uppercase tracking-wide backdrop-blur-md shadow-lg ${
-                      project.statusColor === 'emerald' 
-                        ? 'border-emerald-400/80 bg-emerald-500/90 text-white shadow-emerald-500/50' 
-                        : 'border-amber-400/80 bg-amber-500/90 text-slate-900 shadow-amber-500/50'
-                    }`}>
-                      <span className={`h-2 w-2 rounded-full ${
-                        project.statusColor === 'emerald' ? 'bg-white animate-pulse' : 'bg-slate-900'
-                      }`}></span>
-                      {project.status}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="p-5">
-                  <h4 className="font-display text-xl text-white mb-2 group-hover:text-cyan-300 transition-colors">{project.name}</h4>
-                  <p className="text-sm text-slate-400 mb-4 line-clamp-2">{project.shortDescription}</p>
-                  
-                  {/* Tech Stack Summary */}
-                  <div className="space-y-2 mb-4">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-semibold text-cyan-300">Frontend:</span>
-                      <span className="text-xs text-slate-400 line-clamp-1">{frontendSummary}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-semibold text-emerald-300">Backend:</span>
-                      <span className="text-xs text-slate-400 line-clamp-1">{backendSummary}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-semibold text-blue-300">Database:</span>
-                      <span className="text-xs text-slate-400">{databaseSummary}</span>
-                    </div>
-                  </div>
-
-                  {/* View Details Button */}
-                  <div className="flex items-center justify-between pt-3 border-t border-white/10">
-                    <span className="text-sm font-semibold text-cyan-300 group-hover:text-cyan-200 transition-colors">View Details</span>
-                    <svg className="h-5 w-5 text-cyan-300 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </div>
-              </button>
-              )
-            })}
+            <div className="space-y-4">
+              <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-300">Automation Projects</h3>
+              <div className="grid gap-6 md:grid-cols-2">
+                {automationProjects.map(renderProjectCard)}
+              </div>
+            </div>
           </div>
+
         </section>
 
         {/* Credentials Section - Entry Point */}
@@ -900,87 +1027,116 @@ function App() {
               <p className="text-sm text-slate-400">Technical expertise and creative capabilities</p>
             </div>
           
-            {/* Programming Section - Enhanced Horizontal Layout */}
-            <article className="group rounded-2xl border border-cyan-300/30 bg-gradient-to-br from-cyan-900/20 via-slate-900/50 to-slate-950/50 p-6 hover-lift scroll-animate-scale relative overflow-hidden transition-all duration-300 hover:border-cyan-300/60 hover:shadow-xl hover:shadow-cyan-400/20">
-            {/* Animated Background */}
-            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-emerald-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            
-            <div className="relative">
-              <div className="flex items-center gap-3 mb-5">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-400/30">
-                  <svg className="h-6 w-6 text-cyan-300" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <h3 className="font-display text-2xl text-white">Programming</h3>
-              </div>
+            <div className="grid gap-5 lg:grid-cols-2">
+              {/* Programming Section - Enhanced Horizontal Layout */}
+              <article className="group rounded-2xl border border-cyan-300/30 bg-gradient-to-br from-cyan-900/20 via-slate-900/50 to-slate-950/50 p-6 hover-lift scroll-animate-scale relative overflow-hidden transition-all duration-300 hover:border-cyan-300/60 hover:shadow-xl hover:shadow-cyan-400/20">
+              {/* Animated Background */}
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-emerald-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               
-              <div className="space-y-5">
-                <div>
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="h-1 w-1 rounded-full bg-cyan-400"></div>
-                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-cyan-300">Frontend</p>
+              <div className="relative">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-400/30">
+                    <svg className="h-6 w-6 text-cyan-300" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                    </svg>
                   </div>
-                  <div className="flex flex-wrap gap-2">
-                    {expertiseSegments[0].items
-                      .filter((item) => item.section === 'Frontend')
-                      .map(({ name, Icon, color }) => (
-                        <div
-                          key={name}
-                          className="group/skill flex items-center gap-2 rounded-xl border border-white/10 bg-slate-950/50 px-3 py-2.5 transition-all duration-300 hover:border-cyan-300/50 hover:bg-slate-900/70 hover:scale-110 hover:shadow-lg hover:shadow-cyan-400/20 relative overflow-hidden"
-                        >
-                          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-transparent opacity-0 group-hover/skill:opacity-100 transition-opacity duration-300"></div>
-                          <Icon className={`relative text-xl ${color} group-hover/skill:scale-110 transition-transform duration-300`} />
-                          <p className="relative text-sm font-semibold text-white">{name}</p>
-                        </div>
-                      ))}
-                  </div>
+                  <h3 className="font-display text-2xl text-white">Programming</h3>
                 </div>
                 
-                <div>
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="h-1 w-1 rounded-full bg-emerald-400"></div>
-                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-300">Backend</p>
+                <div className="space-y-5">
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="h-1 w-1 rounded-full bg-cyan-400"></div>
+                      <p className="text-xs font-bold uppercase tracking-[0.18em] text-cyan-300">Frontend</p>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {expertiseSegments[0].items
+                        .filter((item) => item.section === 'Frontend')
+                        .map(({ name, Icon, color }) => (
+                          <div
+                            key={name}
+                            className="group/skill flex items-center gap-2 rounded-xl border border-white/10 bg-slate-950/50 px-3 py-2.5 transition-all duration-300 hover:border-cyan-300/50 hover:bg-slate-900/70 hover:scale-110 hover:shadow-lg hover:shadow-cyan-400/20 relative overflow-hidden"
+                          >
+                            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-transparent opacity-0 group-hover/skill:opacity-100 transition-opacity duration-300"></div>
+                            <Icon className={`relative text-xl ${color} group-hover/skill:scale-110 transition-transform duration-300`} />
+                            <p className="relative text-sm font-semibold text-white">{name}</p>
+                          </div>
+                        ))}
+                    </div>
                   </div>
-                  <div className="flex flex-wrap gap-2">
-                    {expertiseSegments[0].items
-                      .filter((item) => item.section === 'Backend')
-                      .map(({ name, Icon, color }) => (
-                        <div
-                          key={name}
-                          className="group/skill flex items-center gap-2 rounded-xl border border-white/10 bg-slate-950/50 px-3 py-2.5 transition-all duration-300 hover:border-emerald-300/50 hover:bg-slate-900/70 hover:scale-110 hover:shadow-lg hover:shadow-emerald-400/20 relative overflow-hidden"
-                        >
-                          <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-transparent opacity-0 group-hover/skill:opacity-100 transition-opacity duration-300"></div>
-                          <Icon className={`relative text-xl ${color} group-hover/skill:scale-110 transition-transform duration-300`} />
-                          <p className="relative text-sm font-semibold text-white">{name}</p>
-                        </div>
-                      ))}
+                  
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="h-1 w-1 rounded-full bg-emerald-400"></div>
+                      <p className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-300">Backend</p>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {expertiseSegments[0].items
+                        .filter((item) => item.section === 'Backend')
+                        .map(({ name, Icon, color }) => (
+                          <div
+                            key={name}
+                            className="group/skill flex items-center gap-2 rounded-xl border border-white/10 bg-slate-950/50 px-3 py-2.5 transition-all duration-300 hover:border-emerald-300/50 hover:bg-slate-900/70 hover:scale-110 hover:shadow-lg hover:shadow-emerald-400/20 relative overflow-hidden"
+                          >
+                            <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-transparent opacity-0 group-hover/skill:opacity-100 transition-opacity duration-300"></div>
+                            <Icon className={`relative text-xl ${color} group-hover/skill:scale-110 transition-transform duration-300`} />
+                            <p className="relative text-sm font-semibold text-white">{name}</p>
+                          </div>
+                        ))}
+                    </div>
                   </div>
-                </div>
-                
-                <div>
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="h-1 w-1 rounded-full bg-blue-400"></div>
-                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-300">Database</p>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {expertiseSegments[0].items
-                      .filter((item) => item.section === 'Database')
-                      .map(({ name, Icon, color }) => (
-                        <div
-                          key={name}
-                          className="group/skill flex items-center gap-2 rounded-xl border border-white/10 bg-slate-950/50 px-3 py-2.5 transition-all duration-300 hover:border-blue-300/50 hover:bg-slate-900/70 hover:scale-110 hover:shadow-lg hover:shadow-blue-400/20 relative overflow-hidden"
-                        >
-                          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-transparent opacity-0 group-hover/skill:opacity-100 transition-opacity duration-300"></div>
-                          <Icon className={`relative text-xl ${color} group-hover/skill:scale-110 transition-transform duration-300`} />
-                          <p className="relative text-sm font-semibold text-white">{name}</p>
-                        </div>
-                      ))}
+                  
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="h-1 w-1 rounded-full bg-blue-400"></div>
+                      <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-300">Database</p>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {expertiseSegments[0].items
+                        .filter((item) => item.section === 'Database')
+                        .map(({ name, Icon, color }) => (
+                          <div
+                            key={name}
+                            className="group/skill flex items-center gap-2 rounded-xl border border-white/10 bg-slate-950/50 px-3 py-2.5 transition-all duration-300 hover:border-blue-300/50 hover:bg-slate-900/70 hover:scale-110 hover:shadow-lg hover:shadow-blue-400/20 relative overflow-hidden"
+                          >
+                            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-transparent opacity-0 group-hover/skill:opacity-100 transition-opacity duration-300"></div>
+                            <Icon className={`relative text-xl ${color} group-hover/skill:scale-110 transition-transform duration-300`} />
+                            <p className="relative text-sm font-semibold text-white">{name}</p>
+                          </div>
+                        ))}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </article>
+            </article>
+
+            {/* AI Automation Tools */}
+            <article className="group rounded-2xl border border-orange-300/30 bg-gradient-to-br from-orange-900/20 via-slate-900/50 to-slate-950/50 p-6 hover-lift scroll-animate-scale stagger-2 relative overflow-hidden transition-all duration-300 hover:border-orange-300/60 hover:shadow-xl hover:shadow-orange-400/20">
+              <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-amber-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              
+              <div className="relative">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500/20 to-amber-500/20 border border-orange-400/30">
+                    <SiN8N className="h-6 w-6 text-orange-300" />
+                  </div>
+                  <h3 className="font-display text-2xl text-white">AI Automation Tools</h3>
+                </div>
+                
+                <div className="flex flex-wrap gap-2">
+                  {expertiseSegments[2].items.map(({ name, Icon, color }) => (
+                    <div
+                      key={name}
+                      className="group/skill flex items-center gap-2 rounded-xl border border-white/10 bg-slate-950/50 px-3 py-2.5 transition-all duration-300 hover:border-orange-300/50 hover:bg-slate-900/70 hover:scale-110 hover:shadow-lg hover:shadow-orange-400/20 relative overflow-hidden"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-transparent opacity-0 group-hover/skill:opacity-100 transition-opacity duration-300"></div>
+                      <Icon className={`relative text-xl ${color} group-hover/skill:scale-110 transition-transform duration-300`} />
+                      <p className="relative text-sm font-semibold text-white">{name}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </article>
+          </div>
 
           {/* Visual and Video Editing - Enhanced Side by Side */}
           <div className="grid gap-5 md:grid-cols-2">
@@ -1026,7 +1182,7 @@ function App() {
                 </div>
                 
                 <div className="flex flex-wrap gap-2">
-                  {expertiseSegments[2].items.map(({ name, Icon, color, category }) => (
+                  {expertiseSegments[3].items.map(({ name, Icon, color, category }) => (
                     <div
                       key={name}
                       className="group/skill flex items-center gap-2 rounded-xl border border-white/10 bg-slate-950/50 px-3 py-2.5 transition-all duration-300 hover:border-amber-300/50 hover:bg-slate-900/70 hover:scale-110 hover:shadow-lg hover:shadow-amber-400/20 relative overflow-hidden"
@@ -1720,7 +1876,7 @@ function App() {
                           <div>
                             <span className="inline-block rounded-full bg-violet-400/20 px-3 py-1 text-xs font-bold uppercase tracking-wider text-violet-200 mb-2">Primary</span>
                             <h4 className="font-display text-xl text-white mb-1">Elementary Education</h4>
-                            <p className="text-base font-semibold text-violet-200">DoÃ±a Pilar Learning Center Foundation Inc.</p>
+                            <p className="text-base font-semibold text-violet-200">Doña Pilar Learning Center Foundation Inc.</p>
                           </div>
                           <span className="rounded-lg bg-violet-400/20 px-3 py-1.5 text-sm font-bold text-violet-200 border border-violet-400/30">2010 - 2016</span>
                         </div>
@@ -1793,7 +1949,7 @@ function App() {
                               </span>
                             </div>
                             <h4 className="font-display text-xl text-white mb-1">Southern Philippines Medical Center (SPMC)</h4>
-                            <p className="text-sm text-slate-400 mb-2">ðŸ“ JP Laurel Avenue, Bajada, Davao City, 8000, Philippines</p>
+                            <p className="text-sm text-slate-400 mb-2">📍 JP Laurel Avenue, Bajada, Davao City, 8000, Philippines</p>
                             <p className="text-sm text-cyan-200 font-semibold mb-3">Project: Referral System for Emergency Dispatch Communication Center (EDCC)</p>
                             <p className="text-sm text-slate-300 leading-relaxed">Developing a comprehensive hospital referral management system for incoming referrals across neighboring hospitals around the Philippines.</p>
                           </div>
@@ -1814,7 +1970,7 @@ function App() {
                           />
                           <div className="absolute inset-0 flex items-center justify-center bg-slate-950/60 opacity-0 transition-opacity duration-300 group-hover/thumb:opacity-100">
                             <span className="rounded-lg bg-cyan-400 px-4 py-2 text-sm font-semibold text-slate-950 shadow-lg">
-                              ðŸ–¼ï¸ View Project
+                              🖼️ View Project
                             </span>
                           </div>
                         </button>
@@ -1842,7 +1998,7 @@ function App() {
                             <p className="text-sm text-violet-200 font-semibold mb-2">Group Thesis Project</p>
                             <p className="text-sm text-slate-300 leading-relaxed mb-3"> An on-device mobile computer vision system designed to enhance household safety by detecting and assessing hazards, particularly for toddlers aged 0-3 in Filipino homes.</p>
                             <p className="text-sm text-slate-400">
-                              <span className="font-semibold text-slate-300">ðŸ“„ Publication:</span> 9th International Conference on Information and Computer Technologies (ICICT 2026)
+                              <span className="font-semibold text-slate-300">📄 Publication:</span> 9th International Conference on Information and Computer Technologies (ICICT 2026)
                             </p>
                           </div>
                           <span className="rounded-lg bg-violet-400/20 px-3 py-1.5 text-sm font-bold text-violet-200 border border-violet-400/30">2025 - 2026</span>
@@ -1862,7 +2018,7 @@ function App() {
                           />
                           <div className="absolute inset-0 flex items-center justify-center bg-slate-950/60 opacity-0 transition-opacity duration-300 group-hover/thumb:opacity-100">
                             <span className="rounded-lg bg-violet-400 px-4 py-2 text-sm font-semibold text-slate-950 shadow-lg">
-                              ðŸ“„ View PDF
+                              📄 View PDF
                             </span>
                           </div>
                         </button>
@@ -1967,6 +2123,12 @@ function App() {
               </button>
             </div>
 
+            {selectedProject.disclaimer && (
+              <div className="mb-6 rounded-xl border border-amber-300/50 bg-amber-400/10 p-4">
+                <p className="text-sm text-amber-100 leading-relaxed">{selectedProject.disclaimer}</p>
+              </div>
+            )}
+
             {/* Image Gallery */}
             <div className="mb-6">
               <h4 className="text-sm font-semibold uppercase tracking-wide text-cyan-200 mb-3">Screenshots</h4>
@@ -1992,6 +2154,28 @@ function App() {
 
             {/* Project Details */}
             <div className="space-y-6">
+              {Array.isArray(selectedProject.contentSections) ? (
+                <>
+                  {selectedProject.contentSections.map((section) => (
+                    <section key={section.title}>
+                      <h4 className="text-base font-semibold text-white mb-2">{section.title}</h4>
+                      {section.type === 'list' ? (
+                        <ul className="space-y-2">
+                          {section.items.map((item) => (
+                            <li key={item} className="flex gap-2 text-sm text-slate-300">
+                              <span className="text-cyan-300 mt-1">*</span>
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="text-sm text-slate-300 leading-relaxed">{section.content}</p>
+                      )}
+                    </section>
+                  ))}
+                </>
+              ) : (
+                <>
               {/* Description */}
               <section>
                 <h4 className="text-sm font-semibold uppercase tracking-wide text-cyan-200 mb-2">DESCRIPTION</h4>
@@ -2017,7 +2201,7 @@ function App() {
                         <ul className="space-y-1.5">
                           {section.items.map((item, itemIdx) => (
                             <li key={itemIdx} className="flex gap-2 text-sm text-slate-300">
-                              <span className="text-cyan-300 mt-1">â€¢</span>
+                              <span className="text-cyan-300 mt-1">•</span>
                               <span>{item}</span>
                             </li>
                           ))}
@@ -2049,12 +2233,14 @@ function App() {
                 <ul className="space-y-2">
                   {selectedProject.features.map((feature, idx) => (
                     <li key={idx} className="flex gap-2 text-sm text-slate-300">
-                      <span className="text-cyan-300 mt-1">â€¢</span>
+                      <span className="text-cyan-300 mt-1">•</span>
                       <span>{feature}</span>
                     </li>
                   ))}
                 </ul>
               </section>
+                </>
+              )}
               {/* Links */}
               <div className="flex flex-wrap gap-3 pt-4 border-t border-white/10">
                 {selectedProject.links.github && (
@@ -2134,4 +2320,3 @@ function App() {
 }
 
 export default App
-
