@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from 'react'
-import heroImage from '/Assests/img/Icon_NavBar-removebg-preview.png'
+﻿import { useState, useEffect, useRef } from 'react'
+import heroImage from '/Assests/img/Barong Pic.jpg'
 import { FaCss3Alt, FaFacebook, FaFilm, FaGithub, FaGlobe, FaHome, FaHtml5, FaJava, FaPython, FaReact, FaVideo, FaVuejs, FaUser, FaBriefcase, FaCertificate, FaProjectDiagram, FaGraduationCap, FaBars, FaFileAlt, FaEnvelope, FaLinkedin } from 'react-icons/fa'
 import { FaAws, FaXTwitter } from 'react-icons/fa6'
 import { SiCanva, SiDjango, SiFastapi, SiJavascript, SiMysql, SiN8N } from 'react-icons/si'
@@ -13,36 +13,43 @@ const externalVideos = [
   {
     title: 'LionFish_Trivia',
     href: 'https://drive.google.com/file/d/1LT3efurxX4g1ZZanXhd4k3VegYREou4u/view?usp=sharing',
-    poster: 'https://drive.google.com/thumbnail?id=1LT3efurxX4g1ZZanXhd4k3VegYREou4u&sz=w1200',
+    poster: '/Assests/img/video-thumbs/lionfish_trivia.jpg',
     category: 'Trivia Edits',
     external: true,
   },
   {
     title: 'Ruka Sarashina Edit',
     href: 'https://drive.google.com/file/d/1p5GtfX_zQvrOplUjeEdxlQnHBmM5Ht5k/view?usp=sharing',
-    poster: 'https://drive.google.com/thumbnail?id=1p5GtfX_zQvrOplUjeEdxlQnHBmM5Ht5k&sz=w1200',
+    poster: '/Assests/img/video-thumbs/ruka_sarashina_edit.jpg',
     category: 'Anime Edits',
     external: true,
   },
   {
     title: 'Marin Kitagawa Edit',
     href: 'https://drive.google.com/file/d/10vuEMYyQwSGDi5Ie3pSM2JcJzKi9MgZx/view',
-    poster: 'https://drive.google.com/thumbnail?id=10vuEMYyQwSGDi5Ie3pSM2JcJzKi9MgZx&sz=w1200',
+    poster: '/Assests/img/video-thumbs/marin_kitagawa_edit.jpg',
     category: 'Anime Edits',
     external: true,
   },
   {
     title: 'Chika Fujiwara (Sunflower)',
     href: 'https://drive.google.com/file/d/1wm7e1GOMKeynhLBCMpwLzk5ZuX37Be6S/view',
-    poster: 'https://drive.google.com/thumbnail?id=1wm7e1GOMKeynhLBCMpwLzk5ZuX37Be6S&sz=w1200',
+    poster: '/Assests/img/video-thumbs/chika_fujiwara_sunflower.jpg',
     category: 'Anime Edits',
     external: true,
   },
   {
     title: 'Clip_Edit',
     href: 'https://drive.google.com/file/d/1vo8gI2lhMYlqq8UGXSpQDzSOXl3KfDD7/view',
-    poster: 'https://drive.google.com/thumbnail?id=1vo8gI2lhMYlqq8UGXSpQDzSOXl3KfDD7&sz=w1200',
+    poster: '/Assests/img/video-thumbs/clip_edit.jpg',
     category: 'Clip Edits',
+    external: true,
+  },
+  {
+    title: 'Business Edit',
+    href: 'https://drive.google.com/file/d/1nCbSF3IdO0wdjk6X_rod3R6XFaGkiWDm/view?usp=sharing',
+    poster: '/Assests/img/video-thumbs/business_edit.jpg',
+    category: 'Business Edits',
     external: true,
   },
 ]
@@ -273,7 +280,7 @@ function App() {
       features: [
         'Role-Based Access Control (Admin, Handler, Student/Personnel)',
         'Equipment Management with barcode tracking',
-        'Borrow Workflow: Request â†’ Approval â†’ RFID & barcode scanning',
+        'Borrow Workflow: Request -> Approval -> RFID & barcode scanning',
         'AI-Powered Analytics for inventory insights',
         'Notification System with real-time updates'
       ],
@@ -366,13 +373,13 @@ function App() {
       },
       contentSections: [
         {
-          title: '1. 🚀 Project Overview',
+          title: '1. Project Overview',
           type: 'paragraph',
           content:
             'This automation turns long audio recordings into clean, structured meeting notes. It solves the problem of manual transcription by automatically converting audio into organized documentation.'
         },
         {
-          title: '2. 🧠 How It Works (Step-by-Step Flow)',
+          title: '2. How It Works (Step-by-Step Flow)',
           type: 'list',
           items: [
             'Audio file uploaded to Google Drive',
@@ -387,7 +394,7 @@ function App() {
           ]
         },
         {
-          title: '3. ⚙️ Tech Stack',
+          title: '3. Tech Stack',
           type: 'list',
           items: [
             'n8n Cloud: workflow automation platform that connects each step.',
@@ -402,7 +409,7 @@ function App() {
           ]
         },
         {
-          title: '4. 🔥 Key Technical Highlights',
+          title: '4. Key Technical Highlights',
           type: 'list',
           items: [
             'Large file handling (350MB+ / 1.5 hour audio)',
@@ -413,7 +420,7 @@ function App() {
           ]
         },
         {
-          title: '5. ⚠️ Challenges & Lessons Learned',
+          title: '5. Challenges & Lessons Learned',
           type: 'list',
           items: [
             'I resolved CUDA setup issues, including missing DLL errors such as cublas64_12.dll.',
@@ -424,7 +431,7 @@ function App() {
           ]
         },
         {
-          title: '6. 🎯 Why This Project Matters',
+          title: '6. Why This Project Matters',
           type: 'list',
           items: [
             'Automates long-form meeting documentation',
@@ -517,10 +524,48 @@ function App() {
       document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [showNavWorksDropdown])
+
+  // Best-effort protection for sensitive PDF views (resume)
+  useEffect(() => {
+    if (!selectedPdf?.protected) return
+
+    const preventContextMenu = (event) => {
+      event.preventDefault()
+    }
+
+    const preventShortcuts = (event) => {
+      const key = event.key?.toLowerCase()
+      const blockedCombos = ['s', 'p', 'c', 'u', 'a']
+
+      if ((event.ctrlKey || event.metaKey) && blockedCombos.includes(key)) {
+        event.preventDefault()
+      }
+
+      if (key === 'printscreen') {
+        event.preventDefault()
+      }
+    }
+
+    const previousUserSelect = document.body.style.userSelect
+    document.body.style.userSelect = 'none'
+    document.addEventListener('contextmenu', preventContextMenu)
+    document.addEventListener('keydown', preventShortcuts)
+
+    return () => {
+      document.body.style.userSelect = previousUserSelect
+      document.removeEventListener('contextmenu', preventContextMenu)
+      document.removeEventListener('keydown', preventShortcuts)
+    }
+  }, [selectedPdf])
   
   const projectsList = projectsData.map(p => ({ id: p.id, name: p.name }))
   const systemProjects = projectsData.filter((project) => project.projectType === 'system')
   const automationProjects = projectsData.filter((project) => project.projectType === 'automation')
+  const isProtectedPdf = Boolean(selectedPdf?.protected)
+  const protectedResumePreviewImages = ['/Assests/img/resume-preview/resume-page-1.jpg']
+  const selectedPdfViewerHref = selectedPdf?.protected
+    ? `${selectedPdf.href}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`
+    : selectedPdf?.href
   const selectedProjectImages = selectedProject?.images || []
   const selectedProjectImageIndex = selectedProjectImages.findIndex(
     (image) => image.src === selectedProjectImage?.src
@@ -789,7 +834,7 @@ function App() {
             
             {/* Description with fade-in animation */}
             <p className="max-w-xl text-base leading-relaxed text-slate-300 animate-fade-in" style={{ animationDelay: '0.4s' }}> 
-              I am Jayci Gabriel Fernandez Acuña from Davao City, Philippines. Currently a Senior Computer Science student focused on growing as a developer by building practical projects and continuously strengthening my skills in technical analysis and problem-solving. 
+              I am Jayci Gabriel Fernandez Acuña from Davao City, Philippines. I am now a Computer Science graduate focused on growing as a developer by building practical projects and continuously strengthening my skills in technical analysis and problem-solving. 
               I enjoy applying my analytical skills to understand problems, evaluate solutions, and develop user-focused applications through hands-on practice and continuous learning.
             </p>
             
@@ -843,11 +888,18 @@ function App() {
               </a>
               <button
                 type="button"
-                onClick={() => setSelectedCertificate({ title: 'Resume - Jayci Gabriel Acuña', href: '/Assests/img/Resume_Thumbnail.png' })}
+                onClick={() =>
+                  setSelectedPdf({
+                    title: 'Resume - Jayci Gabriel F. Acuña',
+                    href: '/Assests/documents/Resume-Jayci Gabriel F. Acuña.pdf',
+                    protected: true,
+                    watermarkText: 'PROPERTY OF JAYCI GABRIEL F. ACUÑA',
+                    previewImages: protectedResumePreviewImages,
+                  })
+                }
                 className="rounded-xl border border-slate-600 px-5 py-3 text-sm font-semibold text-slate-200 transition-all duration-300 hover:border-cyan-300 hover:text-cyan-200 hover:shadow-lg hover:shadow-cyan-400/30 hover:-translate-y-1 active:translate-y-0"
-              > 
-                Resume 
-              (Outdated)
+              >
+                Resume
               </button>
               <a
                 className="rounded-xl border border-slate-600 px-5 py-3 text-sm font-semibold text-slate-200 transition-all duration-300 hover:border-cyan-300 hover:text-cyan-200 hover:shadow-lg hover:shadow-cyan-400/30 hover:-translate-y-1 active:translate-y-0"
@@ -858,33 +910,16 @@ function App() {
             </div>
           </div>
           <div className="animate-enter-up-delay relative mx-auto w-full max-w-md">
-            {/* Profile Image with Card Flip Effect and Continuous Animations */}
+            {/* Profile Image */}
             <div className="group relative perspective-1000 animate-float-gentle">
-              <div className="relative aspect-[5/6] w-full rounded-[2rem] transition-all duration-700 preserve-3d group-hover:rotate-y-180">
-                {/* Front - Profile Image with Shimmer Effect */}
-                <div className="absolute inset-0 backface-hidden overflow-hidden rounded-[2rem] bg-transparent">
+              <div className="relative aspect-[5/6] w-full rounded-[2rem] transition-all duration-700">
+                <div className="overflow-hidden rounded-[2rem] bg-transparent">
                   <img
-                    className="h-full w-full rounded-[2rem] object-contain object-center animate-rotate-subtle"
+                    className="h-full w-full rounded-[2rem] object-cover object-top animate-rotate-subtle saturate-110 contrast-105"
                     src={heroImage}
                     alt="Jayci Gabriel Acuña"
                   />
                 </div>
-                
-                {/* Back - Code Symbol */}
-                <div className="absolute inset-0 backface-hidden rotate-y-180 flex items-center justify-center rounded-[2rem] border border-cyan-300/40 bg-gradient-to-br from-cyan-900/90 via-slate-900/90 to-slate-950/90 backdrop-blur-sm">
-                  <div className="text-center">
-                    <div className="mb-4 text-8xl font-bold text-cyan-300 animate-pulse-slow">
-                      &lt;/&gt;
-                    </div>
-                    <p className="text-xl font-semibold text-white">Full Stack Developer</p>
-                    <p className="mt-2 text-sm text-cyan-200">Powered by Passion, dev with Precision </p>
-                  </div>
-                </div>
-              </div>
-                
-              {/* Hover Hint */}
-              <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <p className="text-xs text-slate-400 whitespace-nowrap">Hover to flip</p>
               </div>
             </div>
 
@@ -1451,9 +1486,14 @@ function App() {
                               {video.external ? (
                                 <div>
                                   {!activePoster ? (
-                                    <div className="flex aspect-video w-full items-center justify-center rounded-lg border border-dashed border-white/20 bg-slate-900/70 text-xs font-medium uppercase tracking-wide text-slate-300 mb-2">
-                                      Thumbnail unavailable
-                                    </div>
+                                    <a
+                                      href={video.href}
+                                      target="_blank"
+                                      rel="noreferrer"
+                                      className="group/video flex aspect-video w-full items-center justify-center rounded-lg border border-dashed border-white/20 bg-slate-900/70 text-xs font-medium uppercase tracking-wide text-slate-300 mb-2 transition-colors hover:border-cyan-300/60 hover:text-cyan-200"
+                                    >
+                                      Thumbnail unavailable - Click to open
+                                    </a>
                                   ) : (
                                     <a
                                       href={video.href}
@@ -1485,7 +1525,14 @@ function App() {
                                       </div>
                                     </a>
                                   )}
-                                  <p className="font-semibold text-white text-sm line-clamp-2 leading-tight">{video.title}</p>
+                                  <a
+                                    href={video.href}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="font-semibold text-white text-sm line-clamp-2 leading-tight transition-colors hover:text-cyan-200"
+                                  >
+                                    {video.title}
+                                  </a>
                                 </div>
                               ) : (
                                 <div>
@@ -1517,7 +1564,7 @@ function App() {
         <section className="grid gap-8 rounded-3xl border border-white/10 bg-slate-900/60 p-6 sm:p-10 md:grid-cols-[0.9fr_1.1fr] scroll-animate hover-glow transition-all duration-300" id="about">
           <div className="mx-auto w-full max-w-md">
             <img
-              src="/Assests/img/Jayci's Profile.jpeg"
+              src="/Assests/img/Toga Pic.jpg"
               alt="Jayci profile portrait"
               className="h-full min-h-[420px] w-full rounded-2xl border border-white/20 object-cover object-top animate-float-gentle transition-transform duration-500 hover:scale-105"
             />
@@ -1525,7 +1572,7 @@ function App() {
           <div className="space-y-5">
             <h2 className="font-display text-3xl text-white">About Me</h2>
             <p className="leading-relaxed text-slate-300">
-              I am a 23-year-old senior Computer Science student at the University of the Immaculate Conception with a
+              I am a 23-year-old Computer Science graduate from the University of the Immaculate Conception with a
               strong passion for technology, problem-solving, and continuous learning. I was once driven by the dream
               of becoming a professional esports player, and that same competitive mindset and discipline now fuel my
               journey in software development. It taught me focus, adaptability, and the value of consistent
@@ -1662,21 +1709,28 @@ function App() {
 
       {selectedPdf && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/85 p-2 sm:p-4 animate-fade-in">
-          <div className="flex h-[95vh] w-full max-w-6xl flex-col rounded-2xl border border-white/15 bg-slate-900 p-3 sm:h-[90vh] sm:p-4 animate-scale-in">
+          <div className={`flex h-[95vh] w-full max-w-6xl flex-col rounded-2xl border border-white/15 bg-slate-900 p-3 sm:h-[90vh] sm:p-4 animate-scale-in ${isProtectedPdf ? 'select-none' : ''}`}>
             <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <h3 className="font-display text-base text-white sm:text-xl">{selectedPdf.title}</h3>
               <div className="flex gap-2">
-                <a
-                  href={selectedPdf.href}
-                  download
-                  className="inline-flex items-center gap-2 rounded-lg border border-cyan-300/60 bg-cyan-300/10 px-3 py-2 text-xs font-semibold text-cyan-200 transition hover:border-cyan-200 hover:bg-cyan-300/20 sm:text-sm"
-                >
-                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                  <span className="hidden sm:inline">Download</span>
-                  <span className="sm:hidden">PDF</span>
-                </a>
+                {!isProtectedPdf && (
+                  <a
+                    href={selectedPdf.href}
+                    download
+                    className="inline-flex items-center gap-2 rounded-lg border border-cyan-300/60 bg-cyan-300/10 px-3 py-2 text-xs font-semibold text-cyan-200 transition hover:border-cyan-200 hover:bg-cyan-300/20 sm:text-sm"
+                  >
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <span className="hidden sm:inline">Download</span>
+                    <span className="sm:hidden">PDF</span>
+                  </a>
+                )}
+                {isProtectedPdf && (
+                  <span className="inline-flex items-center rounded-lg border border-amber-300/50 bg-amber-300/10 px-3 py-2 text-xs font-semibold text-amber-200 sm:text-sm">
+                    Protected View
+                  </span>
+                )}
                 <button
                   type="button"
                   onClick={() => setSelectedPdf(null)}
@@ -1686,11 +1740,41 @@ function App() {
                 </button>
               </div>
             </div>
-            <iframe
-              src={selectedPdf.href}
-              className="h-full w-full rounded-xl border border-white/10 bg-slate-950"
-              title={selectedPdf.title}
-            />
+            <div className="relative h-full w-full overflow-hidden rounded-xl border border-white/10 bg-slate-950">
+              {isProtectedPdf ? (
+                <div className="h-full overflow-y-auto p-2 sm:p-4">
+                  <div className="mx-auto max-w-3xl space-y-4">
+                    {(selectedPdf.previewImages || []).map((image, index) => (
+                      <img
+                        key={`protected-resume-page-${index + 1}`}
+                        src={image}
+                        alt={`Resume preview page ${index + 1}`}
+                        className="w-full rounded-lg border border-white/10 shadow-xl"
+                        draggable={false}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <iframe
+                  src={selectedPdfViewerHref}
+                  className="h-full w-full bg-slate-950"
+                  title={selectedPdf.title}
+                />
+              )}
+
+              {isProtectedPdf && (
+                <div className="pointer-events-none absolute inset-0 z-10 grid grid-cols-2 gap-2 p-3 opacity-25 sm:grid-cols-3">
+                  {Array.from({ length: 12 }).map((_, index) => (
+                    <div key={`resume-watermark-${index}`} className="flex items-center justify-center overflow-hidden">
+                      <span className="rotate-[-28deg] whitespace-nowrap text-[10px] font-semibold tracking-[0.2em] text-cyan-200 sm:text-xs">
+                        {selectedPdf.watermarkText}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
@@ -1949,7 +2033,7 @@ function App() {
                               </span>
                             </div>
                             <h4 className="font-display text-xl text-white mb-1">Southern Philippines Medical Center (SPMC)</h4>
-                            <p className="text-sm text-slate-400 mb-2">📍 JP Laurel Avenue, Bajada, Davao City, 8000, Philippines</p>
+                            <p className="text-sm text-slate-400 mb-2">JP Laurel Avenue, Bajada, Davao City, 8000, Philippines</p>
                             <p className="text-sm text-cyan-200 font-semibold mb-3">Project: Referral System for Emergency Dispatch Communication Center (EDCC)</p>
                             <p className="text-sm text-slate-300 leading-relaxed">Developing a comprehensive hospital referral management system for incoming referrals across neighboring hospitals around the Philippines.</p>
                           </div>
@@ -1970,10 +2054,39 @@ function App() {
                           />
                           <div className="absolute inset-0 flex items-center justify-center bg-slate-950/60 opacity-0 transition-opacity duration-300 group-hover/thumb:opacity-100">
                             <span className="rounded-lg bg-cyan-400 px-4 py-2 text-sm font-semibold text-slate-950 shadow-lg">
-                              🖼️ View Project
+                              View Project
                             </span>
                           </div>
                         </button>
+                      </div>
+                    </div>
+                  </article>
+                </div>
+
+                {/* Business Website Developer */}
+                <div className="relative md:pl-20">
+                  <div className="absolute left-6 top-6 hidden md:block">
+                    <div className="h-5 w-5 rounded-full border-4 border-emerald-400 bg-slate-900 shadow-lg shadow-emerald-400/50"></div>
+                  </div>
+                  <article className="group rounded-2xl border border-emerald-300/30 bg-gradient-to-br from-emerald-900/20 to-slate-950/50 p-6 hover-lift transition-all duration-300 hover:border-emerald-300/60 hover:shadow-lg hover:shadow-emerald-400/20">
+                    <div className="flex flex-col gap-6">
+                      <div className="flex-1">
+                        <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
+                          <div>
+                            <div className="flex items-center gap-2 mb-2">
+                              <span className="inline-block rounded-full bg-emerald-400/20 px-3 py-1 text-xs font-bold uppercase tracking-wider text-emerald-200">Freelance</span>
+                            </div>
+                            <h4 className="font-display text-xl text-white mb-1">Business Website Developer</h4>
+                            <p className="text-sm text-emerald-200 font-semibold mb-3">Client Projects in Slovakia</p>
+                            <ul className="space-y-2 text-sm text-slate-300">
+                              <li>Developed responsive and visually appealing websites for local businesses.</li>
+                              <li>Improved online presence and customer engagement through SEO-oriented, performance-focused solutions.</li>
+                              <li>Integrated SaaS tools to support operations, lead generation, and customer management.</li>
+                              <li>Collaborated directly with clients to deliver tailored and scalable website implementations.</li>
+                            </ul>
+                          </div>
+                          <span className="rounded-lg bg-emerald-400/20 px-3 py-1.5 text-sm font-bold text-emerald-200 border border-emerald-400/30">Oct 2025 - Mar 2026</span>
+                        </div>
                       </div>
                     </div>
                   </article>
@@ -1998,7 +2111,7 @@ function App() {
                             <p className="text-sm text-violet-200 font-semibold mb-2">Group Thesis Project</p>
                             <p className="text-sm text-slate-300 leading-relaxed mb-3"> An on-device mobile computer vision system designed to enhance household safety by detecting and assessing hazards, particularly for toddlers aged 0-3 in Filipino homes.</p>
                             <p className="text-sm text-slate-400">
-                              <span className="font-semibold text-slate-300">📄 Publication:</span> 9th International Conference on Information and Computer Technologies (ICICT 2026)
+                              <span className="font-semibold text-slate-300">Publication:</span> 9th International Conference on Information and Computer Technologies (ICICT 2026)
                             </p>
                           </div>
                           <span className="rounded-lg bg-violet-400/20 px-3 py-1.5 text-sm font-bold text-violet-200 border border-violet-400/30">2025 - 2026</span>
@@ -2018,7 +2131,7 @@ function App() {
                           />
                           <div className="absolute inset-0 flex items-center justify-center bg-slate-950/60 opacity-0 transition-opacity duration-300 group-hover/thumb:opacity-100">
                             <span className="rounded-lg bg-violet-400 px-4 py-2 text-sm font-semibold text-slate-950 shadow-lg">
-                              📄 View PDF
+                              View PDF
                             </span>
                           </div>
                         </button>
@@ -2201,7 +2314,7 @@ function App() {
                         <ul className="space-y-1.5">
                           {section.items.map((item, itemIdx) => (
                             <li key={itemIdx} className="flex gap-2 text-sm text-slate-300">
-                              <span className="text-cyan-300 mt-1">•</span>
+                              <span className="text-cyan-300 mt-1">â€¢</span>
                               <span>{item}</span>
                             </li>
                           ))}
@@ -2233,7 +2346,7 @@ function App() {
                 <ul className="space-y-2">
                   {selectedProject.features.map((feature, idx) => (
                     <li key={idx} className="flex gap-2 text-sm text-slate-300">
-                      <span className="text-cyan-300 mt-1">•</span>
+                      <span className="text-cyan-300 mt-1">â€¢</span>
                       <span>{feature}</span>
                     </li>
                   ))}
@@ -2320,3 +2433,4 @@ function App() {
 }
 
 export default App
+
