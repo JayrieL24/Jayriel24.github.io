@@ -239,6 +239,7 @@ function App() {
   const [selectedCertificate, setSelectedCertificate] = useState(null)
   const [selectedPdf, setSelectedPdf] = useState(null)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [compactNavigation, setCompactNavigation] = useState(() => window.matchMedia('(max-width: 1024px)').matches)
   const [educationModalOpen, setEducationModalOpen] = useState(false)
   const [experienceModalOpen, setExperienceModalOpen] = useState(false)
   const [projectFilter, setProjectFilter] = useState('all')
@@ -251,6 +252,60 @@ function App() {
   const emailDropdownRef2 = useRef(null)
   const worksDropdownRef = useRef(null)
   
+  useEffect(() => {
+    if (!compactNavigation) return
+    contentRef.current?.scrollTo({ top: 0 })
+    document.querySelector('.workspace-body')?.scrollTo({ top: 0 })
+  }, [activeTab, compactNavigation])
+
+  const modalOpen = Boolean(selectedCertificate || selectedPdf || educationModalOpen || experienceModalOpen || selectedProject || selectedProjectImage)
+  useEffect(() => {
+    const query = window.matchMedia('(max-width: 1024px)')
+    const updateNavigation = () => {
+      setCompactNavigation(query.matches)
+      if (!query.matches) setMobileMenuOpen(false)
+    }
+    query.addEventListener('change', updateNavigation)
+    return () => query.removeEventListener('change', updateNavigation)
+  }, [])
+
+  useEffect(() => {
+    if (!compactNavigation || (!mobileMenuOpen && !modalOpen)) return
+    const previousFocus = document.activeElement
+    const sidebar = document.getElementById('portfolio-navigation')
+    const dialogs = document.querySelectorAll('[role="dialog"]')
+    const surface = modalOpen ? dialogs[dialogs.length - 1] : sidebar
+    const focusable = () => [...surface.querySelectorAll('a[href], button:not([disabled]), iframe, [tabindex="0"]')].filter((element) => element.getClientRects().length)
+    focusable()[0]?.focus({ preventScroll: true })
+    const trapFocus = (event) => {
+      if (event.key === 'Escape' && modalOpen) {
+        event.preventDefault()
+        if (selectedProjectImage) setSelectedProjectImage(null)
+        else if (selectedPdf) setSelectedPdf(null)
+        else if (selectedProject) setSelectedProject(null)
+        else if (selectedCertificate) setSelectedCertificate(null)
+        else if (experienceModalOpen) setExperienceModalOpen(false)
+        else setEducationModalOpen(false)
+      }
+      if (event.key !== 'Tab') return
+      const elements = focusable()
+      const first = elements[0]
+      const last = elements[elements.length - 1]
+      if (event.shiftKey && (document.activeElement === first || !surface.contains(document.activeElement))) {
+        event.preventDefault()
+        last?.focus()
+      } else if (!event.shiftKey && (document.activeElement === last || !surface.contains(document.activeElement))) {
+        event.preventDefault()
+        first?.focus()
+      }
+    }
+    document.addEventListener('keydown', trapFocus)
+    return () => {
+      document.removeEventListener('keydown', trapFocus)
+      if (previousFocus?.isConnected) previousFocus.focus({ preventScroll: true })
+    }
+  }, [compactNavigation, mobileMenuOpen, modalOpen, selectedCertificate, selectedPdf, educationModalOpen, experienceModalOpen, selectedProject, selectedProjectImage])
+
   // Project data with images
   const projectsData = [
     {
@@ -615,7 +670,8 @@ function App() {
     <div id="top" className="min-h-screen bg-app text-slate-100">
       <a className="skip-link" href="#main-content" onClick={(event) => { event.preventDefault(); contentRef.current?.focus() }}>Skip to content</a>
       {mobileMenuOpen && <button className="sidebar-backdrop" aria-label="Close navigation" onClick={() => setMobileMenuOpen(false)} />}
-      <aside id="portfolio-navigation" className={`portfolio-sidebar ${mobileMenuOpen ? 'is-open' : ''}`}>
+      <aside inert={compactNavigation && (modalOpen || !mobileMenuOpen)} aria-hidden={compactNavigation && !mobileMenuOpen ? true : undefined} id="portfolio-navigation" className={`portfolio-sidebar ${mobileMenuOpen ? 'is-open' : ''}`}>
+        <button type="button" className="sidebar-close" aria-label="Close navigation" onClick={() => setMobileMenuOpen(false)}>&#215;</button>
         <a href="#home" className="sidebar-brand" onClick={() => setMobileMenuOpen(false)}><span className="brand-monogram">J.</span><span>Jayci Acuña<span className="brand-caption">PERSONAL PORTFOLIO</span></span></a>
         <div className="sidebar-profile"><img src={heroImage} alt="" /><div><strong>Jayci Gabriel</strong><span>Developer & creative</span></div><span className="profile-dot" /></div>
         <p className="sidebar-label">EXPLORE</p>
@@ -624,14 +680,22 @@ function App() {
         </nav>
         <div className="sidebar-bottom"><p>Based in Davao City,<br />Philippines <span>&#8599;</span></p><div><a href="https://github.com/Jayriel24" target="_blank" rel="noreferrer" aria-label="GitHub"><FaGithub /></a><a href="https://www.linkedin.com/in/jayci-gabriel-acu%C3%B1a-3281953b4" target="_blank" rel="noreferrer" aria-label="LinkedIn"><FaLinkedin /></a><a href="mailto:JayGabri24@gmail.com" aria-label="Email"><FaEnvelope /></a></div><small>Built with curiosity. Always learning.</small></div>
       </aside>
-      <div className="portfolio-workspace">
+      <div className="portfolio-workspace" inert={compactNavigation && (modalOpen || mobileMenuOpen)}>
         <header className="workspace-header">
           <div className="workspace-breadcrumb"><button className="mobile-toggle" aria-label="Toggle navigation" aria-controls="portfolio-navigation" aria-expanded={mobileMenuOpen} onClick={() => setMobileMenuOpen(!mobileMenuOpen)}><FaBars /></button><span>Portfolio</span><span>/</span><strong>{currentTab.label}</strong></div>
-          <a href="#contact" className="header-contact">Let's connect <span>&#8599;</span></a>
+          {compactNavigation ? <a href="#contact" className="header-contact"><span className="header-contact-long">Let's connect</span><span className="header-contact-short">Contact</span><span aria-hidden="true">&#8599;</span></a> : <a href="#contact" className="header-contact">Let's connect <span>&#8599;</span></a>}
         </header>
         <div className={`workspace-body ${activeTab === 'home' ? 'is-home' : ''}`}>
         <main id="main-content" className="portfolio-content" data-tab={activeTab} ref={contentRef} tabIndex={-1}>
           <div className="page-heading"><div><p>THE PORTFOLIO OF JAYCI ACUÑA</p><h2 ref={headingRef} tabIndex={-1}>{currentTab.label === 'Home' ? 'A little about me.' : currentTab.label}</h2><span>{currentTab.description}</span></div><span className="page-index">/ {String(navLinks.indexOf(currentTab) + 1).padStart(2, '0')}</span></div>
+          <div className="compact-home-hero">
+            <div className="compact-home-copy">
+              <p className="compact-home-eyebrow">DEVELOPER & CREATIVE</p>
+              <h1><span>Jayci Gabriel</span><span>Fernandez Acuña</span></h1>
+              <p className="compact-home-role">Full Stack Web Developer & Technical Analyst</p>
+            </div>
+            <div className="compact-home-portrait"><img src="/Assests/img/barong-mobile-transparent.png" alt="Jayci Gabriel Acuña" /></div>
+          </div>
         <section className="mx-auto grid w-full max-w-5xl items-center gap-10 md:grid-cols-[1.1fr_0.9fr]" id="home">
           <div className="home-introduction space-y-6">
             {/* Badges with staggered slide-in animation */}
@@ -651,7 +715,7 @@ function App() {
             </div>
             
             {/* Name and title with slide-in animation */}
-            <div className="animate-enter-left" style={{ animationDelay: '0.2s' }}>
+            <div className="home-desktop-heading animate-enter-left" style={{ animationDelay: '0.2s' }}>
               <h1 className="font-display text-3xl leading-tight text-slate-900 sm:text-5xl transition-all duration-300 hover:text-cyan-700">
                 Jayci Gabriel Fernandez Acuña
               </h1>
@@ -783,7 +847,7 @@ function App() {
                   <button
                     onClick={() => setShowEmailDropdown(!showEmailDropdown)}
                     className="group flex h-12 w-12 items-center justify-center rounded-xl border border-slate-300 bg-white transition-all duration-300 hover:border-cyan-400 hover:bg-cyan-400/10 hover:shadow-lg hover:shadow-cyan-400/30 hover:-translate-y-1 hover:rotate-6"
-                    title="Email"
+                    title="Email" aria-label="Show email addresses" aria-expanded={showEmailDropdown}
                   >
                     <FaEnvelope className="text-xl text-slate-600 transition-all duration-300 group-hover:text-cyan-400 group-hover:scale-110" />
                   </button>
@@ -1036,7 +1100,7 @@ function App() {
                   <button
                     onClick={() => setShowEmailDropdown(!showEmailDropdown)}
                     className="group flex h-12 w-12 items-center justify-center rounded-xl border border-slate-300 bg-white transition-all duration-300 hover:border-cyan-400 hover:bg-cyan-400/10 hover:shadow-lg hover:shadow-cyan-400/30 hover:-translate-y-1"
-                    title="Email"
+                    title="Email" aria-label="Show email addresses" aria-expanded={showEmailDropdown}
                   >
                     <FaEnvelope className="text-xl text-slate-600 transition-colors group-hover:text-cyan-400" />
                   </button>
@@ -1131,8 +1195,8 @@ function App() {
       </div>
 
       {selectedCertificate && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 p-4 animate-fade-in">
-          <div className="w-full max-w-5xl rounded-2xl border border-white/15 bg-slate-900 p-4 animate-scale-in">
+        <div className="modal-overlay fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 p-4 animate-fade-in">
+          <div role="dialog" aria-modal="true" aria-label={selectedCertificate.title} className="certificate-dialog w-full max-w-5xl rounded-2xl border border-white/15 bg-slate-900 p-4 animate-scale-in">
             <div className="mb-3 flex items-center justify-between">
               <h3 className="font-display text-xl text-white">{selectedCertificate.title}</h3>
               <button
@@ -1153,8 +1217,8 @@ function App() {
       )}
 
       {selectedPdf && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/85 p-2 sm:p-4 animate-fade-in">
-          <div className={`flex h-[95vh] w-full max-w-6xl flex-col rounded-2xl border border-white/15 bg-slate-900 p-3 sm:h-[90vh] sm:p-4 animate-scale-in ${isProtectedPdf ? 'select-none' : ''}`}>
+        <div className="modal-overlay fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/85 p-2 sm:p-4 animate-fade-in">
+          <div role="dialog" aria-modal="true" aria-label={selectedPdf.title} className={`pdf-dialog flex h-[95vh] w-full max-w-6xl flex-col rounded-2xl border border-white/15 bg-slate-900 p-3 sm:h-[90vh] sm:p-4 animate-scale-in ${isProtectedPdf ? 'select-none' : ''}`}>
             <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <h3 className="font-display text-base text-white sm:text-xl">{selectedPdf.title}</h3>
               <div className="flex gap-2">
@@ -1226,7 +1290,7 @@ function App() {
 
       {/* Education Modal */}
       {educationModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 p-4">
+        <div className="modal-overlay fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 p-4">
           <div className="education-dialog" role="dialog" aria-modal="true" aria-labelledby="education-title">
             <header className="education-dialog-header"><div><p>MY ACADEMIC JOURNEY</p><h3 id="education-title">Academic Qualifications</h3></div><button type="button" onClick={() => setEducationModalOpen(false)}>Close</button></header>
             <ol className="education-timeline">
@@ -1246,7 +1310,7 @@ function App() {
 
       {/* Experience Modal */}
       {experienceModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 p-4">
+        <div className="modal-overlay fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 p-4">
           <div className="education-dialog experience-dialog" role="dialog" aria-modal="true" aria-labelledby="experience-title">
             <header className="education-dialog-header"><div><p>MY PROFESSIONAL JOURNEY</p><h3 id="experience-title">Professional Experience</h3></div><button type="button" onClick={() => setExperienceModalOpen(false)}>Close</button></header>
             <ol className="education-timeline experience-timeline">
@@ -1423,8 +1487,8 @@ function App() {
 
       {/* Project Detail Modal */}
       {selectedProject && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/85 p-4 animate-fade-in" onClick={() => setSelectedProject(null)}>
-          <div className="w-full max-w-6xl max-h-[90vh] overflow-y-auto rounded-2xl border border-white/15 bg-slate-900 p-6 animate-scale-in" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-overlay fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/85 p-4 animate-fade-in" onClick={() => setSelectedProject(null)}>
+          <div role="dialog" aria-modal="true" aria-label={selectedProject.name} className="project-dialog w-full max-w-6xl max-h-[90vh] overflow-y-auto rounded-2xl border border-white/15 bg-slate-900 p-6 animate-scale-in" onClick={(e) => e.stopPropagation()}>
             <div className="mb-6 flex items-center justify-between">
               <h3 className="font-display text-2xl text-white">{selectedProject.name}</h3>
               <button
@@ -1586,8 +1650,8 @@ function App() {
 
       {/* Project Image Viewer Modal */}
       {selectedProjectImage && (
-        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/90 p-4 animate-fade-in" onClick={() => setSelectedProjectImage(null)}>
-          <div className="relative w-full max-w-7xl" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-overlay fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/90 p-4 animate-fade-in" onClick={() => setSelectedProjectImage(null)}>
+          <div role="dialog" aria-modal="true" aria-label={selectedProjectImage.title} className="image-dialog relative w-full max-w-7xl" onClick={(e) => e.stopPropagation()}>
             <button
               type="button"
               onClick={() => setSelectedProjectImage(null)}
