@@ -259,6 +259,30 @@ function App() {
   }, [activeTab, compactNavigation])
 
   const modalOpen = Boolean(selectedCertificate || selectedPdf || educationModalOpen || experienceModalOpen || selectedProject || selectedProjectImage)
+  // Modal dismissal is shared by every screen size; focus trapping stays scoped below.
+  useEffect(() => {
+    if (!modalOpen) return
+    const dismissActiveModal = (event) => {
+      if (event.key !== 'Escape' || event.isComposing) return
+      event.preventDefault()
+      event.stopPropagation()
+      if (event.repeat) return
+      const dialogs = [...document.querySelectorAll('[role="dialog"]')]
+        .filter((dialog) => dialog.getClientRects().length)
+        .sort((first, second) => Number(getComputedStyle(first.closest('.modal-overlay')).zIndex) - Number(getComputedStyle(second.closest('.modal-overlay')).zIndex))
+      const activeDialog = dialogs[dialogs.length - 1]
+      if (!activeDialog) return
+      if (activeDialog.classList.contains('image-dialog')) setSelectedProjectImage(null)
+      else if (activeDialog.classList.contains('project-dialog')) setSelectedProject(null)
+      else if (activeDialog.classList.contains('pdf-dialog')) setSelectedPdf(null)
+      else if (activeDialog.classList.contains('certificate-dialog')) setSelectedCertificate(null)
+      else if (activeDialog.id === 'experience-dialog') setExperienceModalOpen(false)
+      else if (activeDialog.id === 'education-dialog') setEducationModalOpen(false)
+    }
+    window.addEventListener('keydown', dismissActiveModal, true)
+    return () => window.removeEventListener('keydown', dismissActiveModal, true)
+  }, [modalOpen])
+
   useEffect(() => {
     const query = window.matchMedia('(max-width: 1024px)')
     const updateNavigation = () => {
@@ -278,15 +302,6 @@ function App() {
     const focusable = () => [...surface.querySelectorAll('a[href], button:not([disabled]), iframe, [tabindex="0"]')].filter((element) => element.getClientRects().length)
     focusable()[0]?.focus({ preventScroll: true })
     const trapFocus = (event) => {
-      if (event.key === 'Escape' && modalOpen) {
-        event.preventDefault()
-        if (selectedProjectImage) setSelectedProjectImage(null)
-        else if (selectedPdf) setSelectedPdf(null)
-        else if (selectedProject) setSelectedProject(null)
-        else if (selectedCertificate) setSelectedCertificate(null)
-        else if (experienceModalOpen) setExperienceModalOpen(false)
-        else setEducationModalOpen(false)
-      }
       if (event.key !== 'Tab') return
       const elements = focusable()
       const first = elements[0]
@@ -308,6 +323,192 @@ function App() {
 
   // Project data with images
   const projectsData = [
+    {
+  "id": "hive-rentals",
+  "projectType": "system",
+  "projectTypes": [
+    "system",
+    "marketing"
+  ],
+  "name": "Hive Rentals",
+  "status": "Not Deployed",
+  "thumbnail": "/Assests/img/Projects/Hive/thumbnail.png",
+  "images": [
+    {
+      "src": "/Assests/img/Projects/Hive/landing.png",
+      "title": "Entire marketing landing page",
+      "fullPage": true
+    }
+  ],
+  "shortDescription": "Workspace rental platform with a marketing website, admin dashboard, and CRM backend.",
+  "techStack": {
+    "frontend": "Next.js, React, TypeScript, Tailwind CSS",
+    "backend": "tRPC, Next.js server routes",
+    "database": "PostgreSQL, Drizzle ORM"
+  },
+  "contentSections": [
+    {
+      "title": "About the System",
+      "content": "A workspace rental platform combining a public marketing website with backend workflows and a staff dashboard CRM."
+    },
+    {
+      "title": "System Features",
+      "type": "list",
+      "items": [
+        "Public workspace and location discovery pages",
+        "Office booking and membership workflows",
+        "CRM contacts, organizations, and sales pipeline",
+        "Admin dashboard for operational and business reporting",
+        "Billing and role-aware staff workflows"
+      ]
+    },
+    {
+      "title": "Technology",
+      "content": "Next.js, React, TypeScript, Tailwind CSS, tRPC, PostgreSQL, and Drizzle ORM."
+    },
+    {
+      "title": "Preview Status",
+      "content": "Not deployed. The gallery shows the complete public marketing landing page. The dashboard and CRM require sign-in."
+    }
+  ],
+  "links": {
+    "github": "https://github.com/retcondev/hive-rentals",
+    "website": null
+  }
+},
+    {
+  "id": "klaw-group",
+  "projectType": "marketing",
+  "name": "Khatchatrian Law Group, APC",
+  "status": "Live Website",
+  "thumbnail": "/Assests/img/Projects/Kavara/klaw-group.png",
+  "images": [{ "src": "/Assests/img/Projects/Kavara/klaw-group.png", "title": "KLAW landing page" }],
+  "shortDescription": "Legal services marketing site. In collaboration with Kavara Inc.",
+  "contentSections": [
+    {
+      "title": "About the Website",
+      "content": "A public-facing website for a California law firm, presenting its attorneys, practice areas, and consultation information."
+    },
+    {
+      "title": "Collaboration",
+      "content": "In collaboration with Kavara Inc."
+    },
+    {
+      "title": "Website Highlights",
+      "type": "list",
+      "items": [
+        "Personal injury and Lemon Law practice areas",
+        "Attorney profiles and firm information",
+        "Consultation and contact information"
+      ]
+    }
+  ],
+  "links": {
+    "github": null,
+    "website": "https://www.klawgroupapc.com/"
+  }
+},
+    {
+  "id": "restopath",
+  "projectType": "marketing",
+  "name": "RestoPath",
+  "status": "Live Website",
+  "thumbnail": "/Assests/img/Projects/Kavara/restopath.png",
+  "images": [{ "src": "/Assests/img/Projects/Kavara/restopath.png", "title": "RestoPath landing page" }],
+  "shortDescription": "Restoration software marketing site. In collaboration with Kavara Inc.",
+  "contentSections": [
+    {
+      "title": "About the Website",
+      "content": "A marketing website introducing RestoPath, a platform for restoration companies, with information about job workflows, product features, and demo requests."
+    },
+    {
+      "title": "Collaboration",
+      "content": "In collaboration with Kavara Inc."
+    },
+    {
+      "title": "Website Highlights",
+      "type": "list",
+      "items": [
+        "Restoration workflow and product feature presentation",
+        "Platform information for office and field teams",
+        "Demo request and product exploration links"
+      ]
+    }
+  ],
+  "links": {
+    "github": null,
+    "website": "https://www.restopath.com/"
+  }
+},
+    {
+  "id": "speedystaffers-marketing-site",
+  "projectType": "marketing",
+  "name": "SpeedyStaffers",
+  "status": "Not Deployed",
+  "thumbnail": "/Assests/img/Projects/Marketing/speedystaffers-marketing-site.png",
+  "images": [{"src": "/Assests/img/Projects/Marketing/speedystaffers-marketing-site-full.png", "title": "Entire landing page", "fullPage": true}],
+  "shortDescription": "SpeedyStaffers marketing website. Not deployed yet.",
+  "contentSections": [
+    {
+      "title": "About the Project",
+      "content": "A marketing website for SpeedyStaffers."
+    },
+    {
+      "title": "Deployment Status",
+      "content": "Not deployed yet. The project repository is linked below."
+    }
+  ],
+  "links": {
+    "github": "https://github.com/retcondev/speedystaffers-marketing-site",
+    "website": null
+  }
+},
+    {
+  "id": "level-cars-site",
+  "projectType": "marketing",
+  "name": "Level Cars",
+  "status": "Not Deployed",
+  "thumbnail": "/Assests/img/Projects/Marketing/level-cars-site.png",
+  "images": [{"src": "/Assests/img/Projects/Marketing/level-cars-site-full.png", "title": "Entire landing page", "fullPage": true}],
+  "shortDescription": "Level Cars marketing website. Not deployed yet.",
+  "contentSections": [
+    {
+      "title": "About the Project",
+      "content": "A marketing website for Level Cars."
+    },
+    {
+      "title": "Deployment Status",
+      "content": "Not deployed yet. The project repository is linked below."
+    }
+  ],
+  "links": {
+    "github": "https://github.com/retcondev/level-cars-site",
+    "website": null
+  }
+},
+    {
+  "id": "lupitas-tacos",
+  "projectType": "marketing",
+  "name": "Lupita's Tacos",
+  "status": "Not Deployed",
+  "thumbnail": "/Assests/img/Projects/Marketing/lupitas-tacos.png",
+  "images": [{"src": "/Assests/img/Projects/Marketing/lupitas-tacos-full.png", "title": "Entire landing page", "fullPage": true}],
+  "shortDescription": "Lupita's Tacos marketing website. Not deployed yet.",
+  "contentSections": [
+    {
+      "title": "About the Project",
+      "content": "A marketing website for Lupita's Tacos."
+    },
+    {
+      "title": "Deployment Status",
+      "content": "Not deployed yet. The project repository is linked below."
+    }
+  ],
+  "links": {
+    "github": "https://github.com/retcondev/lupitas-tacos",
+    "website": null
+  }
+},
     {
       id: 'spmc-referral',
       projectType: 'system',
@@ -604,7 +805,7 @@ function App() {
   }, [selectedPdf])
   
   const projectsList = projectsData.map(p => ({ id: p.id, name: p.name }))
-  const visibleProjects = projectsData.filter((project) => projectFilter === 'all' || project.projectType === projectFilter)
+  const visibleProjects = projectsData.filter((project) => projectFilter === 'all' || (project.projectTypes || [project.projectType]).includes(projectFilter))
   const isProtectedPdf = Boolean(selectedPdf?.protected)
   const protectedResumePreviewImages = ['/Assests/img/resume-preview/resume-2026-10-23-c604ce91-page-1.png']
   const selectedPdfViewerHref = selectedPdf?.protected
@@ -643,8 +844,8 @@ function App() {
       'Not specified'
 
     return (
-      <button type="button" key={project.id} onClick={() => setSelectedProject(project)} className="project-preview" aria-label={`View details for ${project.name}`}>
-        <div className="project-preview-image"><img src={project.thumbnail} alt={project.name} loading="lazy" /><span className="project-type-badge">{project.projectType === 'automation' ? 'Automation' : 'System'}</span></div>
+      <button type="button" key={project.id} onClick={() => setSelectedProject(project)} className={`project-preview${project.projectType === 'marketing' ? ' project-preview--marketing' : ''}`} aria-label={`View details for ${project.name}`}>
+        <div className="project-preview-image"><img src={project.thumbnail} alt={project.name} loading="lazy" /><span className="project-type-badge">{project.projectTypes?.includes('marketing') ? 'System / Marketing Site' : project.projectType === 'marketing' ? 'Marketing Site' : project.projectType === 'automation' ? 'Automation' : 'System'}</span></div>
         <div className="project-preview-body">
           <div className="project-preview-meta">{!project.hideStatusBadge && <span className="project-preview-status">{project.status}</span>}</div>
           <h3>{project.name}</h3>
@@ -654,6 +855,14 @@ function App() {
         </div>
       </button>
     )
+  }
+
+  const openProfileDetails = (section) => {
+    window.location.hash = 'about'
+    setActiveTab('about')
+    setMobileMenuOpen(false)
+    setEducationModalOpen(section === 'education')
+    setExperienceModalOpen(section === 'experience')
   }
 
   const navLinks = [
@@ -676,7 +885,13 @@ function App() {
         <div className="sidebar-profile"><img src={heroImage} alt="" /><div><strong>Jayci Gabriel</strong><span>Developer & creative</span></div><span className="profile-dot" /></div>
         <p className="sidebar-label">EXPLORE</p>
         <nav aria-label="Main navigation">
-          {navLinks.map(({ href, label, icon: Icon }, index) => <a key={href} href={href} aria-current={currentTab.href === href ? 'page' : undefined} onClick={() => setMobileMenuOpen(false)}><Icon aria-hidden="true" /><span>{label}</span><small>{String(index + 1).padStart(2, '0')}</small></a>)}
+          {navLinks.map(({ href, label, icon: Icon }, index) => <div key={href} className="sidebar-nav-section">
+            <a href={href} aria-current={currentTab.href === href ? 'page' : undefined} onClick={() => setMobileMenuOpen(false)}><Icon aria-hidden="true" /><span>{label}</span><small>{String(index + 1).padStart(2, '0')}</small></a>
+            {href === '#about' && <div className="profile-shortcuts" role="group" aria-label="Education and experience">
+              <button type="button" onClick={() => openProfileDetails('education')} aria-haspopup="dialog" aria-expanded={educationModalOpen} aria-controls="education-dialog"><FaGraduationCap aria-hidden="true" /><span>Academic Qualifications</span></button>
+              <button type="button" onClick={() => openProfileDetails('experience')} aria-haspopup="dialog" aria-expanded={experienceModalOpen} aria-controls="experience-dialog"><FaBriefcase aria-hidden="true" /><span>Work Experience</span></button>
+            </div>}
+          </div>)}
         </nav>
         <div className="sidebar-bottom"><p>Based in Davao City,<br />Philippines <span>&#8599;</span></p><div><a href="https://github.com/Jayriel24" target="_blank" rel="noreferrer" aria-label="GitHub"><FaGithub /></a><a href="https://www.linkedin.com/in/jayci-gabriel-acu%C3%B1a-3281953b4" target="_blank" rel="noreferrer" aria-label="LinkedIn"><FaLinkedin /></a><a href="mailto:JayGabri24@gmail.com" aria-label="Email"><FaEnvelope /></a></div><small>Built with curiosity. Always learning.</small></div>
       </aside>
@@ -919,7 +1134,7 @@ function App() {
 
         <section id="projects-panel" className="projects-collection">
           <div className="project-filter-bar"><div className="project-filters" role="group" aria-label="Filter projects">
-            {[['all', 'All projects'], ['system', 'Systems'], ['automation', 'Automation']].map(([value, label]) => <button type="button" key={value} aria-pressed={projectFilter === value} onClick={() => setProjectFilter(value)}>{label}<span>{projectsData.filter((project) => value === 'all' || project.projectType === value).length}</span></button>)}
+            {[['all', 'All projects'], ['system', 'Systems'], ['marketing', 'Marketing Sites'], ['automation', 'Automation']].map(([value, label]) => <button type="button" key={value} aria-pressed={projectFilter === value} onClick={() => setProjectFilter(value)}>{label}<span>{projectsData.filter((project) => value === 'all' || (project.projectTypes || [project.projectType]).includes(value)).length}</span></button>)}
           </div><p aria-live="polite">{visibleProjects.length} {visibleProjects.length === 1 ? 'project' : 'projects'}</p></div>
           <div className="project-preview-grid">{visibleProjects.map(renderProjectCard)}</div>
         </section>
@@ -1171,7 +1386,7 @@ function App() {
             </div>
             <section className="about-interests" aria-labelledby="about-interests-title">
               <h3 id="about-interests-title">Beyond the code</h3>
-              <div className="about-interest-row"><SiN8N aria-hidden="true" /><div><h4>Workflow automation</h4><p>Exploring connected workflows and AI-assisted tools, including my audio transcription automation project.</p></div></div>
+              <div className="about-interest-row"><SiN8N aria-hidden="true" /><div><h4>Basic AI Automation</h4><p>Building foundational skills in simple workflows and AI-assisted tools through projects such as audio transcription automation.</p></div></div>
               <div className="about-interest-row"><FaFilm aria-hidden="true" /><div><h4>Video & visual storytelling</h4><p>Creating trivia, anime, and business edits with CapCut and DaVinci Resolve.</p></div></div>
               <div className="about-interest-row"><FaDesktop aria-hidden="true" /><div><h4>PC building & troubleshooting</h4><p>Building gaming and workstation PCs, diagnosing hardware issues, and helping with upgrades and system optimization.</p></div></div>
             </section>
@@ -1291,7 +1506,7 @@ function App() {
       {/* Education Modal */}
       {educationModalOpen && (
         <div className="modal-overlay fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 p-4">
-          <div className="education-dialog" role="dialog" aria-modal="true" aria-labelledby="education-title">
+          <div id="education-dialog" className="education-dialog" role="dialog" aria-modal="true" aria-labelledby="education-title">
             <header className="education-dialog-header"><div><p>MY ACADEMIC JOURNEY</p><h3 id="education-title">Academic Qualifications</h3></div><button type="button" onClick={() => setEducationModalOpen(false)}>Close</button></header>
             <ol className="education-timeline">
               {[
@@ -1311,175 +1526,85 @@ function App() {
       {/* Experience Modal */}
       {experienceModalOpen && (
         <div className="modal-overlay fixed inset-0 z-50 flex items-center justify-center bg-slate-950/85 p-4">
-          <div className="education-dialog experience-dialog" role="dialog" aria-modal="true" aria-labelledby="experience-title">
+          <div id="experience-dialog" className="education-dialog experience-dialog" role="dialog" aria-modal="true" aria-labelledby="experience-title">
             <header className="education-dialog-header"><div><p>MY PROFESSIONAL JOURNEY</p><h3 id="experience-title">Professional Experience</h3></div><button type="button" onClick={() => setExperienceModalOpen(false)}>Close</button></header>
             <ol className="education-timeline experience-timeline">
-              <li className="education-stage "><span className="education-step">01</span><article className="experience-entry">
-                    <div className="flex flex-col sm:flex-row gap-6">
-                      <div className="flex-shrink-0">
-                        <div className="relative">
-
-                          <div className="relative flex h-24 w-24 items-center justify-center rounded-2xl border-2 border-slate-600">
-                            <svg className="h-12 w-12 text-slate-300" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.22l.123.489.804.804A1 1 0 0113 18H7a1 1 0 01-.707-1.707l.804-.804L7.22 15H5a2 2 0 01-2-2V5zm5.771 7H5V5h10v7H8.771z" clipRule="evenodd" />
-                            </svg>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
-                          <div>
-                            <div className="flex items-center gap-2 mb-2">
-                              <span className="inline-block rounded-full bg-slate-700/40 px-3 py-1 text-xs font-bold uppercase tracking-wider text-slate-300">Hardware Services</span>
-                              <span className="inline-flex items-center gap-1 rounded-full bg-slate-700/40 px-2 py-1 text-xs font-bold text-slate-300">
-                                <span className="h-2 w-2 rounded-full bg-slate-700/40"></span>
-                                Active
-                              </span>
-                            </div>
-                            <h4 className="font-display text-xl text-white mb-2">Custom Computer Build, System Diagnostics & Troubleshooting</h4>
-                            <p className="text-sm text-slate-300 leading-relaxed">
-                              Offering professional PC building services, hardware diagnostics, and troubleshooting solutions. Specializing in custom gaming and workstation builds, component upgrades, system optimization, and resolving hardware-related issues to ensure optimal performance and reliability.
-                            </p>
-                          </div>
-                          <span className="rounded-lg bg-slate-700/40 px-3 py-1.5 text-sm font-bold text-slate-300 border border-slate-600">2022 - Present</span>
-                        </div>
-                      </div>
-                    </div>
-                  </article></li>
-              <li className="education-stage "><span className="education-step">02</span><article className="experience-entry">
-                    <div className="flex flex-col sm:flex-row gap-6">
-                      <div className="flex-shrink-0">
-                        <div className="relative">
-
-                          <div className="relative flex h-24 w-24 items-center justify-center rounded-2xl border-2 border-slate-600">
-                            <FaReact className="text-4xl text-slate-300" />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
-                          <div>
-                            <div className="flex items-center gap-2 mb-2">
-                              <span className="inline-block rounded-full bg-slate-700/40 px-3 py-1 text-xs font-bold uppercase tracking-wider text-slate-300">Freelance</span>
-                              <span className="inline-flex items-center gap-1 rounded-full bg-slate-700/40 px-2 py-1 text-xs font-bold text-slate-300">
-                                <span className="h-2 w-2 rounded-full bg-slate-700/40"></span>
-                                Active
-                              </span>
-                            </div>
-                            <h4 className="font-display text-xl text-white mb-2">Web Development</h4>
-                            <p className="text-sm text-slate-300 leading-relaxed">
-                              Providing custom web development services including frontend design, full-stack application development, and website optimization. Working with modern frameworks like React, Django, and Vue to deliver responsive and user-friendly web solutions tailored to client needs.
-                            </p>
-                          </div>
-                          <span className="rounded-lg bg-slate-700/40 px-3 py-1.5 text-sm font-bold text-slate-300 border border-slate-600">2024 - Present</span>
-                        </div>
-                      </div>
-                    </div>
-                  </article></li>
-              <li className="education-stage "><span className="education-step">03</span><article className="experience-entry">
+              {[
+                {
+                  title: 'Web Developer',
+                  organization: 'Kavara Inc.',
+                  category: 'Web Development',
+                  dates: 'October 2025 - October 2026',
+                  highlights: [
+                    'Developed marketing pages and CRM.',
+                    'Built reusable UI components and implemented CRM features to streamline business operations.',
+                    'Integrated APIs and optimized websites for performance, usability, and responsiveness.',
+                  ],
+                },
+                {
+                  title: 'Business Website Developer',
+                  organization: 'Client Projects in Slovakia',
+                  category: 'Client Work',
+                  dates: 'April 2025 - September 2025',
+                  highlights: [
+                    'Developed responsive, SEO-optimized websites for businesses in Slovakia.',
+                    'Integrated SaaS tools and delivered tailored, performance-focused web solutions.',
+                  ],
+                },
+                {
+                  title: 'Southern Philippines Medical Center (SPMC)',
+                  category: 'Internship',
+                  dates: 'January 26, 2026 - March 26, 2026',
+                  highlights: [
+                    'Developed a hospital referral management system alongside other interns.',
+                    'Gathered requirements from healthcare staff and streamlined referral workflows.',
+                  ],
+                  projectId: 'spmc-referral',
+                },
+                {
+                  title: 'Freelance Computer Technician',
+                  category: 'Technical Support',
+                  dates: '2022 - Present',
+                  active: true,
+                  highlights: [
+                    'Diagnosed, repaired, and maintained computer hardware and software.',
+                    'Built custom PCs and provided troubleshooting and technical support.',
+                  ],
+                },
+              ].map((experience, index) => (
+                <li key={experience.title} className={`education-stage${index === 0 ? ' experience-latest' : ''}`}>
+                  <span className="education-step">{String(index + 1).padStart(2, '0')}</span>
+                  <article className="experience-entry">
                     <div className="flex flex-col lg:flex-row gap-6">
-                      <div className="flex-1">
-                        <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
-                          <div>
-                            <div className="flex flex-wrap items-center gap-2 mb-2">
-                              <span className="inline-block rounded-full bg-slate-700/40 px-3 py-1 text-xs font-bold uppercase tracking-wider text-slate-300">Thesis Project</span>
-                              <span className="rounded-full border border-slate-600 bg-slate-700/40 px-2 py-0.5 text-xs font-bold uppercase tracking-wide text-slate-300">Accepted</span>
-                              <span className="rounded-full border border-slate-600 bg-slate-700/40 px-2 py-0.5 text-xs font-bold uppercase tracking-wide text-slate-300">Published</span>
-                            </div>
-                            <h4 className="font-display text-xl text-white mb-1">HEROCS - On-Device Mobile Assessment System for Hazard Detection in Household Environments</h4>
-                            <p className="text-sm text-slate-300 font-semibold mb-2">Group Thesis Project</p>
-                            <p className="text-sm text-slate-300 leading-relaxed mb-3"> An on-device mobile computer vision system designed to enhance household safety by detecting and assessing hazards, particularly for toddlers aged 0-3 in Filipino homes.</p>
-                            <p className="text-sm text-slate-400">
-                              <span className="font-semibold text-slate-300">Publication:</span> 9th International Conference on Information and Computer Technologies (ICICT 2026)
-                            </p>
-                          </div>
-                          <span className="rounded-lg bg-slate-700/40 px-3 py-1.5 text-sm font-bold text-slate-300 border border-slate-600">2025 - 2026</span>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2 mb-2">
+                          <span className="inline-block rounded-full bg-slate-700/40 px-3 py-1 text-xs font-bold uppercase tracking-wider text-slate-300">{experience.category}</span>
+                          {experience.active && <span className="rounded-full border border-slate-600 px-2 py-1 text-xs font-bold text-slate-300">Active</span>}
                         </div>
+                        <h4 className="font-display text-xl text-white mb-1">{experience.title}</h4>
+                        {experience.organization && <p className="text-sm text-slate-300 font-semibold mb-3">{experience.organization}</p>}
+                        <p className="inline-block rounded-lg bg-slate-700/40 px-3 py-1.5 text-sm font-bold text-slate-300 border border-slate-600 mt-2 mb-4">{experience.dates}</p>
+                        <ul className="list-disc pl-5 space-y-2 text-sm text-slate-300 leading-relaxed">
+                          {experience.highlights.map(highlight => <li key={highlight}>{highlight}</li>)}
+                        </ul>
                       </div>
-                      <div className="flex-shrink-0">
-                        <button
-                          type="button"
-                          onClick={() => setSelectedPdf({ title: 'HEROCS Thesis Paper', href: '/Assests/documents/HEROCS.pdf' })}
-                          className="group/thumb relative overflow-hidden rounded-xl border-2 border-slate-600 hover:border-slate-600 transition-all duration-300"
-                        >
-
-                          <img
-                            src="/Assests/img/HEROCS_Thumbnail.jpg"
-                            alt="HEROCS Thesis Thumbnail"
-                            className="relative h-40 w-56 object-cover transition-transform duration-300 group-hover/thumb:scale-105"
-                          />
-                          <div className="absolute inset-0 flex items-center justify-center bg-slate-950/60 opacity-0 transition-opacity duration-300 group-hover/thumb:opacity-100">
-                            <span className="rounded-lg bg-slate-700/40 px-4 py-2 text-sm font-semibold text-slate-950">
-                              View PDF
-                            </span>
-                          </div>
-                        </button>
-                      </div>
-                    </div>
-                  </article></li>
-              <li className="education-stage "><span className="education-step">04</span><article className="experience-entry">
-                    <div className="flex flex-col gap-6">
-                      <div className="flex-1">
-                        <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
-                          <div>
-                            <div className="flex items-center gap-2 mb-2">
-                              <span className="inline-block rounded-full bg-slate-700/40 px-3 py-1 text-xs font-bold uppercase tracking-wider text-slate-300">Freelance</span>
-                            </div>
-                            <h4 className="font-display text-xl text-white mb-1">Business Website Developer</h4>
-                            <p className="text-sm text-slate-300 font-semibold mb-3">Client Projects in Slovakia</p>
-                            <ul className="space-y-2 text-sm text-slate-300">
-                              <li>Developed responsive and visually appealing websites for local businesses.</li>
-                              <li>Improved online presence and customer engagement through SEO-oriented, performance-focused solutions.</li>
-                              <li>Integrated SaaS tools to support operations, lead generation, and customer management.</li>
-                              <li>Collaborated directly with clients to deliver tailored and scalable website implementations.</li>
-                            </ul>
-                          </div>
-                          <span className="rounded-lg bg-slate-700/40 px-3 py-1.5 text-sm font-bold text-slate-300 border border-slate-600">Oct 2025 - Mar 2026</span>
+                      {experience.projectId && (
+                        <div className="flex-shrink-0">
+                          <button
+                            type="button"
+                            onClick={() => setSelectedProject(projectsData.find(project => project.id === experience.projectId))}
+                            aria-label="View SPMC Referral System project"
+                            className="group/thumb relative overflow-hidden rounded-xl border-2 border-slate-600 transition-all duration-300"
+                          >
+                            <img src="/Assests/img/Projects/SPMC/SPMC_Login.png" alt="SPMC Referral System Login" className="relative h-40 w-56 object-cover transition-transform duration-300 group-hover/thumb:scale-105" />
+                            <span className="absolute bottom-0 inset-x-0 bg-slate-950/85 px-4 py-2 text-sm font-semibold text-white">View Project</span>
+                          </button>
                         </div>
-                      </div>
+                      )}
                     </div>
-                  </article></li>
-              <li className="education-stage experience-latest"><span className="education-step">05</span><article className="experience-entry">
-                    <div className="flex flex-col lg:flex-row gap-6">
-                      <div className="flex-1">
-                        <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
-                          <div>
-                            <div className="flex items-center gap-2 mb-2">
-                              <span className="inline-block rounded-full bg-slate-700/40 px-3 py-1 text-xs font-bold uppercase tracking-wider text-slate-300">Internship</span>
-                              <span className="inline-flex items-center gap-1 rounded-full bg-slate-700/40 px-2 py-1 text-xs font-bold text-slate-300">
-                                <span className="h-2 w-2 rounded-full bg-slate-700/40"></span>
-                                Current
-                              </span>
-                            </div>
-                            <h4 className="font-display text-xl text-white mb-1">Southern Philippines Medical Center (SPMC)</h4>
-                            <p className="text-sm text-slate-400 mb-2">JP Laurel Avenue, Bajada, Davao City, 8000, Philippines</p>
-                            <p className="text-sm text-slate-300 font-semibold mb-3">Project: Referral System for Emergency Dispatch Communication Center (EDCC)</p>
-                            <p className="text-sm text-slate-300 leading-relaxed">Developing a comprehensive hospital referral management system for incoming referrals across neighboring hospitals around the Philippines.</p>
-                          </div>
-                          <span className="rounded-lg bg-slate-700/40 px-3 py-1.5 text-sm font-bold text-slate-300 border border-slate-600">Jan 2026 - Present</span>
-                        </div>
-                      </div>
-                      <div className="flex-shrink-0">
-                        <button
-                          type="button"
-                          onClick={() => setSelectedProject(projectsData.find(p => p.id === 'spmc-referral'))}
-                          className="group/thumb relative overflow-hidden rounded-xl border-2 border-slate-600 hover:border-slate-600 transition-all duration-300"
-                        >
-
-                          <img
-                            src="/Assests/img/Projects/SPMC/SPMC_Login.png"
-                            alt="SPMC Referral System Login"
-                            className="relative h-40 w-56 object-cover transition-transform duration-300 group-hover/thumb:scale-105"
-                          />
-                          <div className="absolute inset-0 flex items-center justify-center bg-slate-950/60 opacity-0 transition-opacity duration-300 group-hover/thumb:opacity-100">
-                            <span className="rounded-lg bg-slate-700/40 px-4 py-2 text-sm font-semibold text-slate-950">
-                              View Project
-                            </span>
-                          </div>
-                        </button>
-                      </div>
-                    </div>
-                  </article></li>
+                  </article>
+                </li>
+              ))}
             </ol>
           </div>
         </div>
@@ -1507,7 +1632,7 @@ function App() {
             )}
 
             {/* Image Gallery */}
-            <div className="mb-6">
+            {selectedProject.images.length > 0 && <div className="mb-6">
               <h4 className="text-sm font-semibold uppercase tracking-wide text-cyan-200 mb-3">Screenshots</h4>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {selectedProject.images.map((image, idx) => (
@@ -1527,7 +1652,7 @@ function App() {
                   </button>
                 ))}
               </div>
-            </div>
+            </div>}
 
             {/* Project Details */}
             <div className="space-y-6">
@@ -1651,7 +1776,7 @@ function App() {
       {/* Project Image Viewer Modal */}
       {selectedProjectImage && (
         <div className="modal-overlay fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/90 p-4 animate-fade-in" onClick={() => setSelectedProjectImage(null)}>
-          <div role="dialog" aria-modal="true" aria-label={selectedProjectImage.title} className="image-dialog relative w-full max-w-7xl" onClick={(e) => e.stopPropagation()}>
+          <div role="dialog" aria-modal="true" aria-label={selectedProjectImage.title} className={`image-dialog relative w-full max-w-7xl${selectedProjectImage.fullPage ? ' image-dialog--full-page' : ''}`} onClick={(e) => e.stopPropagation()}>
             <button
               type="button"
               onClick={() => setSelectedProjectImage(null)}
@@ -1661,7 +1786,7 @@ function App() {
             </button>
             <div className="rounded-2xl border border-white/15 bg-slate-900 p-4 animate-scale-in">
               <h4 className="text-lg font-semibold text-white mb-3">{selectedProjectImage.title}</h4>
-              <div className="relative">
+              <div className={selectedProjectImage.fullPage ? "full-page-image-scroll" : "relative"}>
                 {canNavigateProjectImages && (
                   <button
                     type="button"
