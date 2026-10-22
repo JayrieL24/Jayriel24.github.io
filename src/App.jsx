@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import heroImage from '/Assests/img/Barong Pic.jpg'
 import { FaCss3Alt, FaFacebook, FaFilm, FaGithub, FaGlobe, FaHome, FaHtml5, FaJava, FaPython, FaReact, FaVideo, FaVuejs, FaUser, FaBriefcase, FaCertificate, FaProjectDiagram, FaGraduationCap, FaBars, FaFileAlt, FaEnvelope, FaLinkedin, FaDesktop } from 'react-icons/fa'
 import { FaAws, FaXTwitter } from 'react-icons/fa6'
@@ -606,7 +606,7 @@ function App() {
   const projectsList = projectsData.map(p => ({ id: p.id, name: p.name }))
   const visibleProjects = projectsData.filter((project) => projectFilter === 'all' || project.projectType === projectFilter)
   const isProtectedPdf = Boolean(selectedPdf?.protected)
-  const protectedResumePreviewImages = ['/Assests/img/resume-preview/resume-page-1.jpg']
+  const protectedResumePreviewImages = ['/Assests/img/resume-preview/resume-2026-10-23-c604ce91-page-1.png']
   const selectedPdfViewerHref = selectedPdf?.protected
     ? `${selectedPdf.href}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`
     : selectedPdf?.href
